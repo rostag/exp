@@ -11,7 +11,89 @@ export class DiagramComponent implements OnInit {
     };
 
     ngOnInit(): void {
-        this.DrawChart();
+
+        this.drawLine();
+
+        // d3.select("#blueish").style("color", "red").style('border', '1px solid #fc0');
+
+        // const elementHeight = 20;
+
+        // const data = [[10, 60], [40, 90], [60, 10], [190, 10]];
+
+        // var width = 420;
+
+        // const x = d3.scaleLinear()
+        //     .range([0, width]);
+
+        // const lines = d3.select("#lines")
+        //     .attr("width", width);
+
+        //     lines.attr("height", elementHeight * data.length)
+
+        // const sources = lines.selectAll("g")
+        //     .data(data)
+        //     .enter()
+        //     .append("g")
+        //     .attr("transform", function (d, i) { return "translate(0," + i * elementHeight + ")"; });
+
+        // lines.append("rect")
+        //     .attr("width", x)
+        //     .attr("height", elementHeight - 1);
+
+        // lines.append("text")
+        //     .attr("x", function (d) { return x(d.v) - 3; })
+        //     .attr("y", elementHeight / 2)
+        //     .attr("dy", ".35em")
+        //     .text("OK");
+
+        // this.DrawChart();
+    }
+
+    private drawChart() {
+        var width = 420,
+            barHeight = 20;
+
+        var x = d3.scaleLinear()
+            .range([0, width]);
+
+        var chart = d3.select(".chart")
+            .attr("width", width);
+
+        function type(d) {
+            d.value = +d.value; // coerce to number
+            return d;
+        }
+
+        // d3.tsv("data.tsv", type, function (error, data) {
+            // x.domain([0, d3.max(data, function (d) { return d.value; })]);
+
+            const data = [{name: 'Lucas', value: 1}];
+
+            chart.attr("height", barHeight * data.length);
+
+            var bar = chart.selectAll("g")
+                .data(data)
+                .enter().append("g")
+                .attr("transform", function (d, i) { return "translate(0," + i * barHeight + ")"; });
+
+            bar.append("rect")
+                .attr("width", function (d) { return x(d.value); })
+                .attr("height", barHeight - 1);
+
+            bar.append("text")
+                .attr("x", function (d) { return x(d.value) - 3; })
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .text(function (d) { return d.value; });
+        // });
+    }
+
+    private drawLine() {
+        const lines = d3.select("#lines")
+            .append("path")
+            .attr("d", d3.line()([[10, 60], [40, 90], [60, 10], [190, 10]]))
+            .attr("stroke", "black")
+            .attr("fill", 'transparent')
     }
 
     private DrawChart() {
@@ -1450,28 +1532,21 @@ export class DiagramComponent implements OnInit {
                 });
             }
             // console.log(nodes);
-            // k = 1;
-
             return data;
         }
 
         let san;
 
         function sankeyDo() {
-            // dataset = getNodesByCount(30, 30);
-            dataset = datasets[2];
+            dataset = getNodesByCount(20, 20);
+            // dataset = datasets[2];
             console.log('JSON.stringify(dataset)');
             console.log(JSON.stringify(dataset, null, '  '));
             sankey(dataset);
             clearInterval(san);
         }
 
-        // try {
         sankeyDo();
-        // } catch (e) {
-        //     console.log('SANKEY_ERROR:', e);
-        //     san = setInterval(sankeyDo, 100);
-        // }
 
         link = link
             .data(dataset.links)
