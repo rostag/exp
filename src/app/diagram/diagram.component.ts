@@ -46,7 +46,7 @@ export class DiagramComponent implements OnInit {
         //     .attr("dy", ".35em")
         //     .text("OK");
 
-        // this.DrawChart();
+        this.drawChart();
     }
 
     private drawChart() {
@@ -59,15 +59,10 @@ export class DiagramComponent implements OnInit {
         var chart = d3.select(".chart")
             .attr("width", width);
 
-        function type(d) {
-            d.value = +d.value; // coerce to number
-            return d;
-        }
-
         // d3.tsv("data.tsv", type, function (error, data) {
             // x.domain([0, d3.max(data, function (d) { return d.value; })]);
 
-            const data = [{name: 'Lucas', value: 1}];
+            const data = [{value: 1},{value: 10},{value: 30},{value: 100},{value: 300}];
 
             chart.attr("height", barHeight * data.length);
 
@@ -86,6 +81,24 @@ export class DiagramComponent implements OnInit {
                 .attr("dy", ".35em")
                 .text(function (d) { return d.value; });
         // });
+
+        var dataset = d3.range(10);
+
+
+        d3.select("body").selectAll("div")
+            .call(log,"body")
+            .data(dataset)
+            .call(log,"dataset")
+            .enter()
+            .call(log,"enter")
+            .append("div")
+            .call(log,"div")
+            .attr("class", "bar")
+            .call(log,"bar");
+
+        function log(sel,msg) {
+        console.log(msg,sel);
+        }
     }
 
     private drawLine() {
