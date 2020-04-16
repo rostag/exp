@@ -1,7 +1,56 @@
 :host {
 
-    .blueish {
-        color: #27f;
-    }
+    .diagram-container {
+        position: relative;
 
+        .diagram {
+            display: flex;
+
+            .sources {
+                width: 200px;
+                // border: 1px solid #111;
+
+                >div {
+                    border: 1px solid #bbb;
+                    background-color: #333;
+                    margin-bottom: 2px;
+                    color: #eee;
+                }
+            }
+
+            .policies {
+                width: 300px;
+                padding: 10px;
+                // border: 1px solid #aaa;
+
+                >div {
+                    border: 1px solid #bbb;
+                    background-color: #333;
+                    margin-bottom: 2px;
+                    color: #eee;
+                }
+            }
+
+            .destinations {
+                width: 200px;
+                // border: 1px solid #111;
+
+                >div {
+                    border: 1px solid #bbb;
+                    background-color: #333;
+                    margin-bottom: 2px;
+                    color: #eee;
+                }
+            }
+        }
+        .chart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
+            border: 1px solid #dca;
+        }
+    }
 }

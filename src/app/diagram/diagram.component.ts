@@ -18,24 +18,64 @@ export class DiagramComponent implements OnInit {
     }
 
     private drawChart() {
-
         const groupBgColor = '#333';
-        const groupTextColor = '#fff';
+        const groupTextColor = '#ddd';
         const trafficStrokeColor = '#2c0';
         const policyStrokeColor = '#ccc';
 
-        var width = 600,
+        const data = [];
+
+        const sources = d3.selectAll('.sources').selectAll('div');
+        const destinations = d3.selectAll('.destinations').selectAll('div');
+
+        interface FlowEntry {
+            source: string,
+            destination: string
+        }
+
+        const policyEntries: FlowEntry[] = [
+            {
+                source: 'source-1',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-3',
+                destination: 'destination-3'
+            },
+            {
+                source: 'source-4',
+                destination: 'destination-10'
+            }
+        ]
+
+        const chart = d3.select(".chart");
+        const chartRect = (chart.node() as HTMLElement).getBoundingClientRect();
+
+        policyEntries.forEach((policy: FlowEntry) => {
+            const coords = [];
+            const srcEl = (d3.select(`#${policy.source}`).node() as HTMLElement);
+            const dstEl = (d3.select(`#${policy.destination}`).node() as HTMLElement);
+
+            var srcRect = srcEl.getBoundingClientRect();
+            var dstRect = dstEl.getBoundingClientRect();
+            coords.push([srcRect.right - chartRect.left, srcRect.top - chartRect.top]);
+            coords.push([dstRect.left - chartRect.left, dstRect.top - chartRect.top]);
+
+            console.log(coords);
+
+            this.drawConnectorLine(coords, trafficStrokeColor, policyStrokeColor);
+        });
+
+        var width = 800,
             barHeight = 30;
 
         var x = d3.scaleLinear()
             .range([0, width]);
 
-        var chart = d3.select(".chart")
+        chart
             .attr("width", width);
 
-        const data = [{ value: .1 }, { value: .2 }, { value: .3 }, { value: .4 }, { value: .3 }];
-
-        chart.attr("height", barHeight * data.length);
+        chart.attr("height", barHeight * policyEntries.length + 200);
 
         var bar = chart.selectAll("g")
             .data(data)
@@ -44,38 +84,28 @@ export class DiagramComponent implements OnInit {
 
         bar.append("rect")
             .style('fill', groupBgColor)
-            .attr("width", function (d) {
-                // console.log('width:', d, d.value, x(d.value) );
-                return x(d.value);
-            })
+            .attr("width", 10)
             .attr("height", barHeight - 1);
 
-        bar.append("text")
-            .style("fill", groupTextColor)
-            .attr("x", function (d) { return '.45em' })
-            .attr("y", barHeight / 2)
-            .attr("dy", ".45em")
-            .text(function (d) { return d.value; });
-
-        this.drawConnectorLine(trafficStrokeColor, policyStrokeColor);
+        // bar.append("text")
+        //     .style("fill", groupTextColor)
+        //     .attr("x", function (d) { return '.45em' })
+        //     .attr("y", barHeight / 2)
+        //     .attr("dy", ".45em")
+        //     .text(function (d) { return d.value; });
     }
 
-    private drawConnectorLine(trafficStrokeColor, policyStrokeColor) {
-        const lineGenerator = d3.line()
-            .curve(d3.curveCardinal);
+    private drawConnectorLine(data, trafficStrokeColor, policyStrokeColor) {
+        const lineGenerator = d3.line().curve(d3.curveCardinal);
 
-        const points: [number, number][] = [
-            [0, 90],
-            [100, 100],
-            [200, 90]
-        ];
+        const points: [number, number][] = data;
 
         const pathData = lineGenerator(points);
 
         d3.select('.chart')
             .append('path')
             .style('fill', 'none')
-            .style('stroke', policyStrokeColor)
+            .style('stroke', trafficStrokeColor)
             .attr('d', pathData);
 
         d3.select('svg')
