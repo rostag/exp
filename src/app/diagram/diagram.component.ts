@@ -58,8 +58,8 @@ export class DiagramComponent implements OnInit {
 
             var srcRect = srcEl.getBoundingClientRect();
             var dstRect = dstEl.getBoundingClientRect();
-            coords.push([srcRect.right - chartRect.left, srcRect.top - chartRect.top]);
-            coords.push([dstRect.left - chartRect.left, dstRect.top - chartRect.top]);
+            coords.push([srcRect.right - chartRect.left, srcRect.top - chartRect.top + srcRect.height / 2]);
+            coords.push([dstRect.left - chartRect.left, dstRect.top - chartRect.top + dstRect.height / 2]);
 
             console.log(coords);
 
