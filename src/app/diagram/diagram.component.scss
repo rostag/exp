@@ -15,7 +15,13 @@
                     background-color: #333;
                     margin-bottom: 2px;
                     color: #eee;
+
                 }
+
+                >div:before {
+                    content:  "\2713 ";
+                }
+
             }
 
             .policies {
