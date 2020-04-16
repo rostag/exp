@@ -47,11 +47,13 @@ export class DiagramComponent implements OnInit {
         //     .text("OK");
 
         this.drawChart();
+
+        // this.logExample();
     }
 
     private drawChart() {
-        var width = 420,
-            barHeight = 20;
+        var width = 600,
+            barHeight = 30;
 
         var x = d3.scaleLinear()
             .range([0, width]);
@@ -59,45 +61,46 @@ export class DiagramComponent implements OnInit {
         var chart = d3.select(".chart")
             .attr("width", width);
 
-        // d3.tsv("data.tsv", type, function (error, data) {
-            // x.domain([0, d3.max(data, function (d) { return d.value; })]);
+        const data = [{ value: .1 }, { value: .2 }, { value: .3 }, { value: .4 }, { value: .3 }];
 
-            const data = [{value: 1},{value: 10},{value: 30},{value: 100},{value: 300}];
+        chart.attr("height", barHeight * data.length);
 
-            chart.attr("height", barHeight * data.length);
+        var bar = chart.selectAll("g")
+            .data(data)
+            .enter().append("g")
+            .attr("transform", function (d, i) { return "translate(0," + i * barHeight + ")"; });
 
-            var bar = chart.selectAll("g")
-                .data(data)
-                .enter().append("g")
-                .attr("transform", function (d, i) { return "translate(0," + i * barHeight + ")"; });
+        bar.append("rect")
+            .attr("width", function (d) {
+                console.log('width:', d, d.value, x(d.value) );
+                return x(d.value); 
+            })
+            .attr("height", barHeight - 1);
 
-            bar.append("rect")
-                .attr("width", function (d) { return x(d.value); })
-                .attr("height", barHeight - 1);
+        bar.append("text")
+            .attr("x", function (d) { return x(d.value) - 3; })
+            .attr("y", barHeight / 2)
+            .attr("dy", ".35em")
+            .text(function (d) { return d.value; });
 
-            bar.append("text")
-                .attr("x", function (d) { return x(d.value) - 3; })
-                .attr("y", barHeight / 2)
-                .attr("dy", ".35em")
-                .text(function (d) { return d.value; });
-        // });
+    }
 
+    private logExample() {
         var dataset = d3.range(10);
 
-
         d3.select("body").selectAll("div")
-            .call(log,"body")
+            .call(log, "body")
             .data(dataset)
-            .call(log,"dataset")
+            .call(log, "dataset")
             .enter()
-            .call(log,"enter")
+            .call(log, "enter")
             .append("div")
-            .call(log,"div")
+            .call(log, "div")
             .attr("class", "bar")
-            .call(log,"bar");
+            .call(log, "bar");
 
-        function log(sel,msg) {
-        console.log(msg,sel);
+        function log(sel, msg) {
+            console.log(msg, sel);
         }
     }
 
