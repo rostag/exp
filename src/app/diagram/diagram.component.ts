@@ -12,11 +12,8 @@ export class DiagramComponent implements OnInit {
     };
 
     ngOnInit(): void {
-
-        this.drawLine();
-
         this.drawChart();
-
+        // this.drawLine();
         // this.logExample();
     }
 
