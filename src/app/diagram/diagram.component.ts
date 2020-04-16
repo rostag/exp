@@ -24,6 +24,8 @@ export class DiagramComponent implements OnInit {
 
         const groupBgColor = '#333';
         const groupTextColor = '#fff';
+        const trafficStrokeColor = '#2c0';
+        const policyStrokeColor = '#ccc';
 
         var width = 600,
             barHeight = 30;
@@ -58,28 +60,41 @@ export class DiagramComponent implements OnInit {
             .attr("dy", ".45em")
             .text(function (d) { return d.value; });
 
+        this.drawConnectorLine(trafficStrokeColor, policyStrokeColor);
+    }
+
+    private drawConnectorLine(trafficStrokeColor, policyStrokeColor) {
         const lineGenerator = d3.line()
             .curve(d3.curveCardinal);
 
         const points: [number, number][] = [
-            [100, 90],
+            [0, 90],
             [100, 100],
-            [200, 30],
-            [300, 50],
-            [400, 40],
-            [500, 80]
+            [200, 90]
         ];
 
         const pathData = lineGenerator(points);
 
-        d3.select('path')
-	        .attr('d', pathData);
+        d3.select('.chart')
+            .append('path')
+            .style('fill', 'none')
+            .style('stroke', policyStrokeColor)
+            .attr('d', pathData);
 
-        // bar.append("path")
-        //     .attr("d", d3.line()([[10, 60], [40, 90], [60, 10], [190, 10]]))
-        //     .attr("stroke", "black")
-        //     .attr("fill", 'transparent')
-
+        d3.select('svg')
+            .selectAll('circle')
+            .data(points)
+            .enter()
+            .append('circle')
+            .style('fill', 'none')
+            .style('stroke', policyStrokeColor)
+            .attr('cx', function (d) {
+                return d[0];
+            })
+            .attr('cy', function (d) {
+                return d[1];
+            })
+            .attr('r', 3);
     }
 
     private logExample() {
