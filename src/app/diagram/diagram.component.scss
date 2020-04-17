@@ -1,9 +1,9 @@
 :host {
     display: block;
-    background-color: #000;
+    background-color: #def;
 
     .diagram-container {
-        background-color: #eee;
+        background-color: #efd;
         width: 100%;
 
         .diagram {
@@ -58,7 +58,7 @@
             }
         }
         .chart {
-            background-color: #ddd;
+            background-color: #fafafa;
         }
     }
 }

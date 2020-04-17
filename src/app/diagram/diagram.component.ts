@@ -47,10 +47,15 @@ export class DiagramComponent implements OnInit {
             }
         ]
 
-        const chartContainer = d3.select(".chart-container");
-        const containerWidth = (chartContainer.node() as HTMLElement).getBoundingClientRect().width;
-        const chart = d3.select(".chart");
-        const chartRect = (chart.node() as HTMLElement).getBoundingClientRect();
+        // Clean up before re-rendering
+        d3.select('.chart-container').selectAll('*').remove();
+
+        const chartContainer = d3.select('.chart-container');
+        const chartContainerWidth = (chartContainer.node() as HTMLElement).getBoundingClientRect().width;
+        const chart = chartContainer
+            .append('svg')
+            .attr('class', 'chart');
+        const chartRect = (chart.node() as any).getBoundingClientRect();
 
         policyEntries.forEach((policy: FlowEntry) => {
             const coords = [];
@@ -65,33 +70,34 @@ export class DiagramComponent implements OnInit {
             this.drawConnectorLine(coords, trafficStrokeColor, policyStrokeColor);
         });
 
-        var width = containerWidth,
-            barHeight = 30;
+        const chartWidth = chartContainerWidth;
+        const barHeight = 30;
 
-        var x = d3.scaleLinear()
-            .range([0, width]);
+        const x = d3
+            .scaleLinear()
+            .range([0, chartWidth]);
 
         chart
-            .attr("width", width);
+            .attr('width', chartWidth)
+            .attr('height', barHeight * policyEntries.length + 200);
 
-        chart.attr("height", barHeight * policyEntries.length + 200);
-
-        var bar = chart.selectAll("g")
+        var bar = chart
+            .append('g')
             .data(data)
-            .enter().append("g")
-            .attr("transform", function (d, i) { return "translate(0," + i * barHeight + ")"; });
+            .enter().append('g')
+            .attr('transform', function (d, i) { return 'translate(0,' + i * barHeight + ')'; });
 
-        bar.append("rect")
+        bar.append('rect')
             .style('fill', groupBgColor)
-            .attr("width", 10)
-            .attr("height", barHeight - 1);
+            .attr('width', '10px')
+            .attr('height', barHeight - 1);
 
-        // bar.append("text")
-        //     .style("fill", groupTextColor)
-        //     .attr("x", function (d) { return '.45em' })
-        //     .attr("y", barHeight / 2)
-        //     .attr("dy", ".45em")
-        //     .text(function (d) { return d.value; });
+        bar.append("text")
+            .style("fill", groupTextColor)
+            .attr("x", function (d) { return '.45em' })
+            .attr("y", barHeight / 2)
+            .attr("dy", ".45em")
+            .text(function (d) { return d.value; });
     }
 
     private drawConnectorLine(data, trafficStrokeColor, policyStrokeColor) {
