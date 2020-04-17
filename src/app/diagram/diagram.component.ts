@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
+import { sources, destinations } from './data-mocks';
 
 export interface FlowEntry {
     source: string,
@@ -96,86 +97,8 @@ export const flowEntries: FlowEntry[] = [
 })
 export class DiagramComponent implements OnInit {
 
-    public sources: ResourceGroup[] = [
-        {
-            id: 'source-1',
-            label: 'All External Users',
-            type: 'user'
-        },
-        {
-            id: 'source-2',
-            label: 'VIP Internal',
-            type: 'user'
-        },
-        {
-            id: 'source-3',
-            label: 'US_Users',
-            type: 'user'
-        },
-        {
-            id: 'source-4',
-            label: 'Europe Users',
-            type: 'user'
-        },
-        {
-            id: 'source-5',
-            label: 'Users_Germany',
-            type: 'user'
-        },
-        {
-            id: 'source-6',
-            label: 'Beta Customers',
-            type: 'user'
-        },
-    ]
-
-    public destinations: ResourceGroup[] = [
-        {
-            label: 'Level-2 Data', 
-            id: 'destination-1',
-            type: 'data'
-        },
-        {
-            label: 'Primary Databases', 
-            id: 'destination-2',
-            type: 'data'
-        },
-        {
-            label: 'Low Latency Data', 
-            id: 'destination-3',
-            type: 'data'
-        },
-        {
-            label: 'Level-4 Critical Data', 
-            id: 'destination-4',
-            type: 'data'
-        },
-        {
-            label: 'Level-3 HIRD Data', 
-            id: 'destination-5',
-            type: 'data'
-        },
-        {
-            label: 'High Latency Data', 
-            id: 'destination-6',
-            type: 'data'
-        },
-        {
-            label: 'HIPPA Data', 
-            id: 'destination-7',
-            type: 'data'
-        },
-        {
-            label: 'Level-1 Data', 
-            id: 'destination-8',
-            type: 'data'
-        },
-        {
-            label: 'EU Data', 
-            id: 'destination-9',
-            type: 'data'
-        }            
-    ];    
+    public sources = sources;
+    public destinations = destinations;
 
     barHeight = 30;
 
