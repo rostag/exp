@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DiagramComponent } from './diagram/diagram.component';
+import { FlowDiagramComponent } from './diagram/diagram.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DiagramComponent
+    FlowDiagramComponent
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,7 @@ export interface ResourceGroup {
     templateUrl: './diagram.component.html',
     styleUrls: ['./diagram.component.scss']
 })
-export class DiagramComponent implements OnInit {
+export class FlowDiagramComponent implements OnInit {
 
     public sources = sources;
     public destinations = destinations;
