@@ -8,9 +8,8 @@ describe('FlowDiagramComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FlowDiagramComponent ]
-    })
-    .compileComponents();
+      declarations: [FlowDiagramComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
