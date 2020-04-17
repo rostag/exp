@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FlowDiagramComponent } from './diagram/diagram.component';
+import { FlowDiagramComponent } from './flow-diagram/diagram.component';
 
 @NgModule({
   declarations: [
