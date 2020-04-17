@@ -30,11 +30,12 @@ export class DiagramComponent implements OnInit {
     barHeight = 24;
 
     // Flow line
-    flowCapColor = 'rgba(255, 255, 255, 0.31)';
+    flowCapColor = 'rgba(195, 195, 195, 1)';
     flowStrokeColor = '#ccc';
     flowStrokeOpacity = .5;
     flowStrokeColorSelected = '#2c0';
-    flowStrokeWidth = 5;
+    flowStrokeWidth = 2;
+    flowStrokeWidthSelected = 7;
     flowCapWidth = 5;
 
     // Gate
@@ -45,21 +46,22 @@ export class DiagramComponent implements OnInit {
     gateHeight = 23;
     gateLabelColor = '#ddd';
     gateFontSize = 10;
+    selectedItem: any;
 
     @HostListener('window:resize', ['$event'])
-    onResize(event) {
-        this.drawChart(event);
+    onResize() {
+        this.drawChart();
     }
 
     ngOnInit(): void {
-        // this.logExample();
+        this.selectedItem = flowEntries[3];
     }    
 
     ngAfterViewInit(): void {
-        this.drawChart(null);
+        this.drawChart();
     }    
 
-    private drawChart(evt) {
+    private drawChart() {
 
         // Clean up before re-rendering
         d3.select('.chart-container').selectAll('*').remove();
@@ -159,7 +161,7 @@ export class DiagramComponent implements OnInit {
             .style('fill', 'none')
             .style('stroke', gate.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
             .style('opacity', gate.selected ? 1 : this.flowStrokeOpacity)
-            .style('stroke-width', this.flowStrokeWidth)
+            .style('stroke-width', gate.selected ? this.flowStrokeWidthSelected : this.flowStrokeWidth)
             .attr('d', pathData);
 
         chart
@@ -186,27 +188,18 @@ export class DiagramComponent implements OnInit {
 
     }
 
-    private logExample() {
-        var dataset = d3.range(10);
-
-        d3.select("body").selectAll("div")
-            .call(log, "body")
-            .data(dataset)
-            .call(log, "dataset")
-            .enter()
-            .call(log, "enter")
-            .append("div")
-            .call(log, "div")
-            .attr("class", "bar")
-            .call(log, "bar");
-
-        function log(sel, msg) {
-            console.log(msg, sel);
-        }
-    }
-
     public byType(collection, type) {
         return collection.filter(item => item.type === type);
+    }
+
+    public selectFlow(item) {
+        console.log('Sel:', this.selectedItem, item);
+        
+        this.selectedItem.selected = false;
+        this.selectedItem = item;
+        this.selectedItem.selected = true;
+
+        this.drawChart();
     }
 
     private testChart() {

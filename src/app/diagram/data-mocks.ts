@@ -179,12 +179,6 @@ export const flowEntries: FlowEntry[] = [
         label: 'Internet Users'
     },
     {
-        source: 'source-2',
-        destination: 'destination-1',
-        intent: 'ALLOW',
-        label: 'Svc-Svc Blocks'
-    },
-    {
         source: 'source-3',
         destination: 'destination-1',
         intent: 'DENY',
@@ -206,37 +200,37 @@ export const flowEntries: FlowEntry[] = [
     },
     {
         source: 'source-5',
-        destination: 'destination-1',
+        destination: 'destination-9',
         intent: 'DENY',
         label: 'Unknown Policy Name'
     },
     {
         source: 'source-6',
-        destination: 'destination-1',
+        destination: 'destination-9',
         intent: 'ALLOW',
         label: '3rd Part Service Data Ingestion'
     },
     {
         source: 'source-1',
-        destination: 'destination-2',
+        destination: 'destination-8',
         intent: 'ALLOW',
         label: 'Test Policy 3'
     },
     {
         source: 'source-3',
-        destination: 'destination-2',
+        destination: 'destination-7',
         intent: 'ALLOW',
         label: 'VIP Data'
     },
     {
         source: 'source-4',
-        destination: 'destination-2',
+        destination: 'destination-9',
         intent: 'ALLOW',
         label: 'Privileged'
     },
     {
         source: 'source-1',
-        destination: 'destination-9',
+        destination: 'destination-8',
         intent: 'DENY',
         label: 'Default DENY'
     },
