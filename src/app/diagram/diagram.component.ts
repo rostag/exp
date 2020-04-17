@@ -136,6 +136,8 @@ export class DiagramComponent implements OnInit {
         chart
             .append('rect')
             .style('fill', this.groupBgColor)
+            .attr('x', data[0][0])
+            .attr('y', data[0][1] - this.barHeight / 2)
             .attr('width', this.rectWidth)
             .attr('height', this.barHeight - 1);
 
@@ -143,6 +145,7 @@ export class DiagramComponent implements OnInit {
             .append('rect')
             .style('fill', this.groupBgColor)
             .attr('x', data[4][0] - this.rectWidth)
+            .attr('y', data[4][1] - this.barHeight / 2)
             .attr('width', this.rectWidth)
             .attr('height', this.barHeight - 1);
 
