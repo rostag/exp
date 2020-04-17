@@ -137,9 +137,7 @@ export class DiagramComponent implements OnInit {
 
     private drawChart(evt) {
 
-        const data = [];
-
-        const gateEntries: FlowEntry[] = [
+        const flowEntries: FlowEntry[] = [
             {
                 source: 'source-1',
                 destination: 'destination-1',
@@ -239,9 +237,9 @@ export class DiagramComponent implements OnInit {
 
         chart
             .attr('width', chartWidth)
-            .attr('height', this.barHeight * gateEntries.length + 200);
+            .attr('height', this.barHeight * flowEntries.length + 200);
 
-        gateEntries.forEach((gate: FlowEntry) => {
+        flowEntries.forEach((gate: FlowEntry) => {
             const controlRatio = 3;
             const coords = [];
             const srcEl = (d3.select(`#${gate.source}`).node() as HTMLElement);
