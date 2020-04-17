@@ -12,10 +12,16 @@ export class DiagramComponent implements OnInit {
     barHeight = 30;
     groupBgColor = '#333';
     groupTextColor = '#ddd';
-    trafficStrokeColor = '#2c0';
     policyStrokeColor = '#ccc';
 
     rectWidth = 5;
+
+    // Traffic line
+    trafficStrokeColor = '#ccc';
+    trafficStrokeOpacity = .5;
+    trafficStrokeColorSelected = '#2c0';
+    trafficStrokeWidth = 5;
+
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {
@@ -42,6 +48,46 @@ export class DiagramComponent implements OnInit {
                 destination: 'destination-1'
             },
             {
+                source: 'source-2',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-3',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-4',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-5',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-6',
+                destination: 'destination-1'
+            },
+            {
+                source: 'source-1',
+                destination: 'destination-2'
+            },
+            {
+                source: 'source-3',
+                destination: 'destination-2'
+            },
+            {
+                source: 'source-4',
+                destination: 'destination-2'
+            },
+            {
+                source: 'source-5',
+                destination: 'destination-2'
+            },
+            {
+                source: 'source-6',
+                destination: 'destination-2'
+            },
+            {
                 source: 'source-3',
                 destination: 'destination-3'
             },
@@ -58,7 +104,8 @@ export class DiagramComponent implements OnInit {
         const chartContainerWidth = (chartContainer.node() as HTMLElement).getBoundingClientRect().width;
         const chart = chartContainer
             .append('svg')
-            .attr('class', 'chart');
+            .attr('class', 'chart')
+            .style('fill', '#fafafa');
         const chartRect = (chart.node() as any).getBoundingClientRect();
 
         const chartWidth = chartContainerWidth;
@@ -153,6 +200,8 @@ export class DiagramComponent implements OnInit {
             .append('path')
             .style('fill', 'none')
             .style('stroke', this.trafficStrokeColor)
+            .style('opacity', this.trafficStrokeOpacity)
+            .style('stroke-width', this.trafficStrokeWidth)
             .attr('d', pathData);
 
         chart
