@@ -27,7 +27,7 @@ export class DiagramComponent implements OnInit {
     public destinations = destinations;
     public flowEntries = flowEntries;
 
-    barHeight = 30;
+    barHeight = 24;
 
     // Flow line
     flowCapColor = 'rgba(255, 255, 255, 0.31)';
@@ -153,11 +153,12 @@ export class DiagramComponent implements OnInit {
             .attr('width', this.flowCapWidth)
             .attr('height', this.barHeight - 1);
 
+        // Line
         chart
             .append('path')
             .style('fill', 'none')
-            .style('stroke', this.flowStrokeColor)
-            .style('opacity', this.flowStrokeOpacity)
+            .style('stroke', gate.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
+            .style('opacity', gate.selected ? 1 : this.flowStrokeOpacity)
             .style('stroke-width', this.flowStrokeWidth)
             .attr('d', pathData);
 

@@ -194,13 +194,15 @@ export const flowEntries: FlowEntry[] = [
         source: 'source-4',
         destination: 'destination-2',
         intent: 'ALLOW',
-        label: 'User-Data Requests'
+        label: 'User-Data Requests',
+        selected: true
     },
     {
         source: 'source-4',
         destination: 'destination-5',
         intent: 'ALLOW',
-        label: 'User-Data Requests'
+        label: 'User-Data Requests',
+        selected: true
     },
     {
         source: 'source-5',
