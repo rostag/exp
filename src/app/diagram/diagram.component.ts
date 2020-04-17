@@ -9,6 +9,14 @@ import * as d3Sankey from 'd3-sankey';
 })
 export class DiagramComponent implements OnInit {
 
+    barHeight = 30;
+    groupBgColor = '#333';
+    groupTextColor = '#ddd';
+    trafficStrokeColor = '#2c0';
+    policyStrokeColor = '#ccc';
+
+    rectWidth = 5;
+
     @HostListener('window:resize', ['$event'])
     onResize(event) {
         this.drawChart(event);
@@ -20,10 +28,6 @@ export class DiagramComponent implements OnInit {
     }
 
     private drawChart(evt) {
-        const groupBgColor = '#333';
-        const groupTextColor = '#ddd';
-        const trafficStrokeColor = '#2c0';
-        const policyStrokeColor = '#ccc';
 
         const data = [];
 
@@ -57,21 +61,7 @@ export class DiagramComponent implements OnInit {
             .attr('class', 'chart');
         const chartRect = (chart.node() as any).getBoundingClientRect();
 
-        policyEntries.forEach((policy: FlowEntry) => {
-            const coords = [];
-            const srcEl = (d3.select(`#${policy.source}`).node() as HTMLElement);
-            const dstEl = (d3.select(`#${policy.destination}`).node() as HTMLElement);
-
-            var srcRect = srcEl.getBoundingClientRect();
-            var dstRect = dstEl.getBoundingClientRect();
-            coords.push([srcRect.right - chartRect.left, srcRect.top - chartRect.top + srcRect.height / 2]);
-            coords.push([dstRect.left - chartRect.left, dstRect.top - chartRect.top + dstRect.height / 2]);
-
-            this.drawConnectorLine(coords, trafficStrokeColor, policyStrokeColor);
-        });
-
         const chartWidth = chartContainerWidth;
-        const barHeight = 30;
 
         const x = d3
             .scaleLinear()
@@ -79,47 +69,94 @@ export class DiagramComponent implements OnInit {
 
         chart
             .attr('width', chartWidth)
-            .attr('height', barHeight * policyEntries.length + 200);
+            .attr('height', this.barHeight * policyEntries.length + 200);
 
-        var bar = chart
-            .append('g')
-            .data(data)
-            .enter().append('g')
-            .attr('transform', function (d, i) { return 'translate(0,' + i * barHeight + ')'; });
+        policyEntries.forEach((policy: FlowEntry) => {
+            const controlRatio = 3;
+            const coords = [];
+            const srcEl = (d3.select(`#${policy.source}`).node() as HTMLElement);
+            const dstEl = (d3.select(`#${policy.destination}`).node() as HTMLElement);
 
-        bar.append('rect')
-            .style('fill', groupBgColor)
-            .attr('width', '10px')
-            .attr('height', barHeight - 1);
+            var srcRect = srcEl.getBoundingClientRect();
+            var dstRect = dstEl.getBoundingClientRect();
 
-        bar.append("text")
-            .style("fill", groupTextColor)
-            .attr("x", function (d) { return '.45em' })
-            .attr("y", barHeight / 2)
-            .attr("dy", ".45em")
-            .text(function (d) { return d.value; });
+            const startX = srcRect.right - chartRect.left;
+            const startY = srcRect.top - chartRect.top + srcRect.height / 2;
+
+            const endX = dstRect.left - chartRect.left;
+            const endY = dstRect.top - chartRect.top + dstRect.height / 2;
+
+            const distX = endX - startX;
+            const distY = endY - startY;
+
+            const control1X = startX + (distX / controlRatio);
+            const control1Y = startY;
+
+            const control2X = endX - (distX / controlRatio);
+            const control2Y = endY;
+
+            const midX = startX + distX / 2;
+            const midY = startY + distY / 2; 
+
+            coords.push([startX, startY]);
+            coords.push([control1X, control1Y]);
+            coords.push([midX, midY]);
+            coords.push([control2X, control2Y]);
+            coords.push([endX, endY]);
+
+            this.drawConnectorLine(coords);
+        });
+
+        // var bar = chart
+        //     .append('g')
+        //     .data(data)
+        //     .enter().append('g')
+        //     .attr('transform', (d, i) => { return 'translate(0,' + i * this.barHeight + ')'; });
+
+        // bar.append('rect')
+        //     .style('fill', this.groupBgColor)
+        //     .attr('width', '10px')
+        //     .attr('height', this.barHeight - 1);
+
+        // bar.append("text")
+        //     .style("fill", this.groupTextColor)
+        //     .attr("x", function (d) { return '.45em' })
+        //     .attr("y", this.barHeight / 2)
+        //     .attr("dy", ".45em")
+        //     .text(function (d) { return d.value; });
     }
 
-    private drawConnectorLine(data, trafficStrokeColor, policyStrokeColor) {
-        const lineGenerator = d3.line().curve(d3.curveCardinal);
-
+    private drawConnectorLine(data) {
+        const lineGenerator = d3.line().curve(d3.curveBasis);
         const points: [number, number][] = data;
-
         const pathData = lineGenerator(points);
+        const chart = d3.select('.chart');
 
-        d3.select('.chart')
+        // Draw rectangles
+        chart
+            .append('rect')
+            .style('fill', this.groupBgColor)
+            .attr('width', this.rectWidth)
+            .attr('height', this.barHeight - 1);
+
+        chart
+            .append('rect')
+            .style('fill', this.groupBgColor)
+            .attr('x', data[4][0] - this.rectWidth)
+            .attr('width', this.rectWidth)
+            .attr('height', this.barHeight - 1);
+
+        chart
             .append('path')
             .style('fill', 'none')
-            .style('stroke', trafficStrokeColor)
+            .style('stroke', this.trafficStrokeColor)
             .attr('d', pathData);
 
-        d3.select('svg')
-            .selectAll('circle')
-            .data(points)
-            .enter()
+        chart
             .append('circle')
+            .data([points[2]])
             .style('fill', 'none')
-            .style('stroke', policyStrokeColor)
+            .style('stroke', this.policyStrokeColor)
             .attr('cx', function (d) {
                 return d[0];
             })
@@ -177,9 +214,6 @@ export class DiagramComponent implements OnInit {
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
             .selectAll("g");
-
-        // d3.json("./dataset.json", function (error, dataset: any) {});
-        //if (error) throw error;
 
         function getRandomLink(min, max, volume) {
             const link = {
