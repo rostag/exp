@@ -18,7 +18,7 @@ export const flowEntries: FlowEntry[] = [
     {
         source: 'source-1',
         destination: 'destination-1',
-        intent: 'ALLOW',
+        intent: 'DENY',
         label: 'Internet Users'
     },
     {
@@ -283,7 +283,7 @@ export class DiagramComponent implements OnInit {
     private drawConnectorLine(data, gate) {
         const lineGenerator = d3.line().curve(d3.curveBasis);
         const points: [number, number][] = data;
-        const pathData = lineGenerator(points);
+        const pathData = gate.intent === 'ALLOW' ? lineGenerator(points) : lineGenerator(points.slice(0,3));
         const chart = d3.select('.chart');
 
         // Draw rectangles
