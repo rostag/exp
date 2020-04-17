@@ -2,6 +2,19 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
 import * as d3Sankey from 'd3-sankey';
 
+export interface FlowEntry {
+    source: string,
+    destination: string,
+    intent: string,
+    label: string
+}
+
+export interface ResourceGroup {
+    id: string
+    label: string,
+    type: string
+}
+
 @Component({
     selector: 'app-diagram',
     templateUrl: './diagram.component.html',
@@ -9,25 +22,105 @@ import * as d3Sankey from 'd3-sankey';
 })
 export class DiagramComponent implements OnInit {
 
+    public sources: ResourceGroup[] = [
+        {
+            id: 'source-1',
+            label: 'All External Users',
+            type: 'user'
+        },
+        {
+            id: 'source-2',
+            label: 'VIP Internal',
+            type: 'user'
+        },
+        {
+            id: 'source-3',
+            label: 'US_Users',
+            type: 'user'
+        },
+        {
+            id: 'source-4',
+            label: 'Europe Users',
+            type: 'user'
+        },
+        {
+            id: 'source-5',
+            label: 'Users_Germany',
+            type: 'user'
+        },
+        {
+            id: 'source-6',
+            label: 'Beta Customers',
+            type: 'user'
+        },
+    ]
+
+    public destinations: ResourceGroup[] = [
+        {
+            label: 'Level-2 Data', 
+            id: 'destination-1',
+            type: 'data'
+        },
+        {
+            label: 'Primary Databases', 
+            id: 'destination-2',
+            type: 'data'
+        },
+        {
+            label: 'Low Latency Data', 
+            id: 'destination-3',
+            type: 'data'
+        },
+        {
+            label: 'Level-4 Critical Data', 
+            id: 'destination-4',
+            type: 'data'
+        },
+        {
+            label: 'Level-3 HIRD Data', 
+            id: 'destination-5',
+            type: 'data'
+        },
+        {
+            label: 'High Latency Data', 
+            id: 'destination-6',
+            type: 'data'
+        },
+        {
+            label: 'HIPPA Data', 
+            id: 'destination-7',
+            type: 'data'
+        },
+        {
+            label: 'Level-1 Data', 
+            id: 'destination-8',
+            type: 'data'
+        },
+        {
+            label: 'EU Data', 
+            id: 'destination-9',
+            type: 'data'
+        }            
+    ];    
+
     barHeight = 30;
-    groupTextColor = '#ddd';
 
-    rectWidth = 5;
-
-    // Traffic line
+    // Flow line
     flowCapColor = 'rgba(255, 255, 255, 0.31)';
+    flowStrokeColor = '#ccc';
+    flowStrokeOpacity = .5;
+    flowStrokeColorSelected = '#2c0';
+    flowStrokeWidth = 5;
+    flowCapWidth = 5;
 
-    trafficStrokeColor = '#ccc';
-    trafficStrokeOpacity = .5;
-    trafficStrokeColorSelected = '#2c0';
-    trafficStrokeWidth = 5;
-
-    // Control point
-    cpStrokeColor = 'rgba(255, 255, 255, 0.7)';
-    cpDenyFillColor = '#C22100';
-    cpAllowFillColor = '#59961C';
-    cpWidth = 23;
-    cpHeight = 23;
+    // Gate
+    gateStrokeColor = 'rgba(255, 255, 255, 0.7)';
+    gateDenyFillColor = '#C22100';
+    gateAllowFillColor = '#59961C';
+    gateWidth = 23;
+    gateHeight = 23;
+    gateLabelColor = '#ddd';
+    gateFontSize = 10;
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {
@@ -35,71 +128,95 @@ export class DiagramComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.drawChart(null);
         // this.logExample();
-    }
+    }    
+
+    ngAfterViewInit(): void {
+        this.drawChart(null);
+    }    
 
     private drawChart(evt) {
 
         const data = [];
 
-        interface FlowEntry {
-            source: string,
-            destination: string
-        }
-
-        const policyEntries: FlowEntry[] = [
+        const gateEntries: FlowEntry[] = [
             {
                 source: 'source-1',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'ALLOW',
+                label: 'Internet Users'
             },
             {
                 source: 'source-2',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'ALLOW',
+                label: 'Internet Users'
             },
             {
                 source: 'source-3',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'DENY',
+                label: 'Internet Users'
             },
             {
                 source: 'source-4',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'ALLOW',
+                label: 'Internet Users'
             },
             {
                 source: 'source-5',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'DENY',
+                label: 'Internet Users'
             },
             {
                 source: 'source-6',
-                destination: 'destination-1'
+                destination: 'destination-1',
+                intent: 'ALLOW',
+                label: 'Internet Users'
             },
             {
                 source: 'source-1',
-                destination: 'destination-2'
+                destination: 'destination-2',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-3',
-                destination: 'destination-2'
+                destination: 'destination-2',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-4',
-                destination: 'destination-2'
+                destination: 'destination-2',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-5',
-                destination: 'destination-2'
+                destination: 'destination-2',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-6',
-                destination: 'destination-2'
+                destination: 'destination-2',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-3',
-                destination: 'destination-3'
+                destination: 'destination-3',
+                intent: 'ALLOW',
+                label: ''
             },
             {
                 source: 'source-4',
-                destination: 'destination-10'
+                destination: 'destination-10',
+                intent: 'ALLOW',
+                label: ''
             }
         ]
 
@@ -122,13 +239,13 @@ export class DiagramComponent implements OnInit {
 
         chart
             .attr('width', chartWidth)
-            .attr('height', this.barHeight * policyEntries.length + 200);
+            .attr('height', this.barHeight * gateEntries.length + 200);
 
-        policyEntries.forEach((policy: FlowEntry) => {
+        gateEntries.forEach((gate: FlowEntry) => {
             const controlRatio = 3;
             const coords = [];
-            const srcEl = (d3.select(`#${policy.source}`).node() as HTMLElement);
-            const dstEl = (d3.select(`#${policy.destination}`).node() as HTMLElement);
+            const srcEl = (d3.select(`#${gate.source}`).node() as HTMLElement);
+            const dstEl = (d3.select(`#${gate.destination}`).node() as HTMLElement);
 
             var srcRect = srcEl.getBoundingClientRect();
             var dstRect = dstEl.getBoundingClientRect();
@@ -149,7 +266,7 @@ export class DiagramComponent implements OnInit {
             const control2Y = endY;
 
             const midX = startX + distX / 2;
-            const midY = startY + distY / 2; 
+            const midY = startY + distY / 2;
 
             coords.push([startX, startY]);
             coords.push([control1X, control1Y]);
@@ -157,7 +274,7 @@ export class DiagramComponent implements OnInit {
             coords.push([control2X, control2Y]);
             coords.push([endX, endY]);
 
-            this.drawConnectorLine(coords);
+            this.drawConnectorLine(coords, gate);
         });
 
         // var bar = chart
@@ -170,16 +287,9 @@ export class DiagramComponent implements OnInit {
         //     .style('fill', this.groupBgColor)
         //     .attr('width', '10px')
         //     .attr('height', this.barHeight - 1);
-
-        // bar.append("text")
-        //     .style("fill", this.groupTextColor)
-        //     .attr("x", function (d) { return '.45em' })
-        //     .attr("y", this.barHeight / 2)
-        //     .attr("dy", ".45em")
-        //     .text(function (d) { return d.value; });
     }
 
-    private drawConnectorLine(data) {
+    private drawConnectorLine(data, gate) {
         const lineGenerator = d3.line().curve(d3.curveBasis);
         const points: [number, number][] = data;
         const pathData = lineGenerator(points);
@@ -191,37 +301,47 @@ export class DiagramComponent implements OnInit {
             .style('fill', this.flowCapColor)
             .attr('x', data[0][0])
             .attr('y', data[0][1] - this.barHeight / 2)
-            .attr('width', this.rectWidth)
+            .attr('width', this.flowCapWidth)
             .attr('height', this.barHeight - 1);
 
         chart
             .append('rect')
             .style('fill', this.flowCapColor)
-            .attr('x', data[4][0] - this.rectWidth)
+            .attr('x', data[4][0] - this.flowCapWidth)
             .attr('y', data[4][1] - this.barHeight / 2)
-            .attr('width', this.rectWidth)
+            .attr('width', this.flowCapWidth)
             .attr('height', this.barHeight - 1);
 
         chart
             .append('path')
             .style('fill', 'none')
-            .style('stroke', this.trafficStrokeColor)
-            .style('opacity', this.trafficStrokeOpacity)
-            .style('stroke-width', this.trafficStrokeWidth)
+            .style('stroke', this.flowStrokeColor)
+            .style('opacity', this.flowStrokeOpacity)
+            .style('stroke-width', this.flowStrokeWidth)
             .attr('d', pathData);
 
         chart
             .append('circle')
             .data([points[2]])
-            .style('fill', this.cpAllowFillColor)
-            .style('stroke', this.cpStrokeColor)
+            .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
+            .style('stroke', this.gateStrokeColor)
             .attr('cx', function (d) {
                 return d[0];
             })
             .attr('cy', function (d) {
                 return d[1];
             })
-            .attr('r', this.cpWidth / 2);
+            .attr('r', this.gateWidth / 2);
+
+        chart
+            .append('text')
+            .style('fill', this.gateLabelColor)
+            .attr('font-size', this.gateFontSize)
+            .attr('x', points[2][0])
+            .attr('y', points[2][1])
+            .attr('dy', ".45em")
+            .text(function (d) { return gate.label; });
+
     }
 
     private logExample() {
