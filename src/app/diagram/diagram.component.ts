@@ -12,7 +12,6 @@ export class DiagramComponent implements OnInit {
     barHeight = 30;
     groupBgColor = '#333';
     groupTextColor = '#ddd';
-    policyStrokeColor = '#ccc';
 
     rectWidth = 5;
 
@@ -22,6 +21,12 @@ export class DiagramComponent implements OnInit {
     trafficStrokeColorSelected = '#2c0';
     trafficStrokeWidth = 5;
 
+    // Control point
+    cpStrokeColor = 'rgba(255, 255, 255, 0.7)';
+    cpDenyFillColor = '#C22100';
+    cpAllowFillColor = '#59961C';
+    cpWidth = 23;
+    cpHeight = 23;
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {
@@ -207,15 +212,15 @@ export class DiagramComponent implements OnInit {
         chart
             .append('circle')
             .data([points[2]])
-            .style('fill', 'none')
-            .style('stroke', this.policyStrokeColor)
+            .style('fill', this.cpAllowFillColor)
+            .style('stroke', this.cpStrokeColor)
             .attr('cx', function (d) {
                 return d[0];
             })
             .attr('cy', function (d) {
                 return d[1];
             })
-            .attr('r', 3);
+            .attr('r', this.cpWidth / 2);
     }
 
     private logExample() {
