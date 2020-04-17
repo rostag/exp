@@ -1,12 +1,13 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
-import { sources, destinations } from './data-mocks';
+import { sources, destinations, flowEntries } from './data-mocks';
 
 export interface FlowEntry {
     source: string,
     destination: string,
     intent: string,
-    label: string
+    label: string,
+    selected?: boolean,
 }
 
 export interface ResourceGroup {
@@ -14,81 +15,6 @@ export interface ResourceGroup {
     label: string,
     type: string
 }
-
-export const flowEntries: FlowEntry[] = [
-    {
-        source: 'source-1',
-        destination: 'destination-1',
-        intent: 'DENY',
-        label: 'Internet Users'
-    },
-    {
-        source: 'source-2',
-        destination: 'destination-1',
-        intent: 'ALLOW',
-        label: 'Svc-Svc Blocks'
-    },
-    {
-        source: 'source-3',
-        destination: 'destination-1',
-        intent: 'DENY',
-        label: 'Data Compliance Policy'
-    },
-    {
-        source: 'source-4',
-        destination: 'destination-1',
-        intent: 'ALLOW',
-        label: 'User-Data Requests'
-    },
-    {
-        source: 'source-5',
-        destination: 'destination-1',
-        intent: 'DENY',
-        label: 'Unknown Policy Name'
-    },
-    {
-        source: 'source-6',
-        destination: 'destination-1',
-        intent: 'ALLOW',
-        label: '3rd Part Service Data Ingestion'
-    },
-    {
-        source: 'source-1',
-        destination: 'destination-2',
-        intent: 'ALLOW',
-        label: 'Test Policy 3'
-    },
-    {
-        source: 'source-3',
-        destination: 'destination-2',
-        intent: 'ALLOW',
-        label: 'VIP Data'
-    },
-    {
-        source: 'source-4',
-        destination: 'destination-2',
-        intent: 'ALLOW',
-        label: 'Privileged'
-    },
-    {
-        source: 'source-5',
-        destination: 'destination-2',
-        intent: 'ALLOW',
-        label: 'Default DENY'
-    },
-    {
-        source: 'source-6',
-        destination: 'destination-2',
-        intent: 'ALLOW',
-        label: ''
-    },
-    {
-        source: 'source-3',
-        destination: 'destination-3',
-        intent: 'ALLOW',
-        label: ''
-    }
-];
 
 @Component({
     selector: 'app-diagram',
@@ -99,6 +25,7 @@ export class DiagramComponent implements OnInit {
 
     public sources = sources;
     public destinations = destinations;
+    public flowEntries = flowEntries;
 
     barHeight = 30;
 
@@ -153,9 +80,9 @@ export class DiagramComponent implements OnInit {
 
         chart
             .attr('width', chartWidth)
-            .attr('height', this.barHeight * flowEntries.length + 200);
+            .attr('height', this.barHeight * this.flowEntries.length + 200);
 
-        flowEntries.forEach((gate: FlowEntry) => {
+        this.flowEntries.forEach((gate: FlowEntry) => {
             const controlRatio = 3;
             const coords = [];
             const srcEl = (d3.select(`#${gate.source}`).node() as HTMLElement);

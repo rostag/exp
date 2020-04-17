@@ -1,4 +1,4 @@
-import { ResourceGroup } from './diagram.component';
+import { ResourceGroup, FlowEntry } from './diagram.component';
 
 export const sources: ResourceGroup[] = [
     {
@@ -33,92 +33,92 @@ export const sources: ResourceGroup[] = [
     },
     {
         label: 'Users_France',
-        id: 'source-6',
+        id: 'source-7',
         type: 'user'
     },
     {
         label: 'All VIP',
-        id: 'source-6',
+        id: 'source-8',
         type: 'user'
     },
     {
         label: 'Security_Admin',
-        id: 'source-6',
+        id: 'source-9',
         type: 'user'
     },
     {
         label: 'GNS-02_Admin',
-        id: 'source-6',
+        id: 'source-10',
         type: 'user'
     },
     {
         label: 'GNS-01_Admin',
-        id: 'source-6',
+        id: 'source-11',
         type: 'user'
     },
     {
         label: 'Project Alpha Team',
-        id: 'source-6',
+        id: 'source-12',
         type: 'user'
     },
     {
         label: 'Ops Team',
-        id: 'source-6',
+        id: 'source-13',
         type: 'user'
     },
     {
         label: 'privilege_prod_services',
-        id: 'source-6',
+        id: 'source-14',
         type: 'service'
     },
     {
         label: 'All Services',
-        id: 'source-6',
+        id: 'source-15',
         type: 'service'
     },
     {
         label: 'Singleton Services',
-        id: 'source-6',
+        id: 'source-16',
         type: 'service'
     },
     {
         label: 'Critical SLO Services',
-        id: 'source-6',
+        id: 'source-17',
         type: 'service'
     },
     {
         label: 'Frankfurt Nodes',
-        id: 'source-6',
+        id: 'source-18',
         type: 'node'
     },
     {
         label: 'Las Vegas Nodes',
-        id: 'source-6',
+        id: 'source-19',
         type: 'node'
     },
     {
         label: 'Tokyo Nodes',
-        id: 'source-6',
+        id: 'source-20',
         type: 'node'
     },
     {
         label: 'High Latency Nodes',
-        id: 'source-6',
+        id: 'source-21',
         type: 'node'
     },
     {
         label: '4x-large Nodes',
-        id: 'source-6',
+        id: 'source-22',
         type: 'node'
     },
     {
         label: 'C5 Instances',
-        id: 'source-6',
+        id: 'source-23',
         type: 'node'
     },
     {
         label: 'Other nodes',
-        id: 'source-6',
+        id: 'source-24',
         type: 'node'
     },
 ]
@@ -170,3 +170,162 @@ export const destinations: ResourceGroup[] = [
         type: 'data'
     }            
 ];    
+
+export const flowEntries: FlowEntry[] = [
+    {
+        source: 'source-1',
+        destination: 'destination-1',
+        intent: 'DENY',
+        label: 'Internet Users'
+    },
+    {
+        source: 'source-2',
+        destination: 'destination-1',
+        intent: 'ALLOW',
+        label: 'Svc-Svc Blocks'
+    },
+    {
+        source: 'source-3',
+        destination: 'destination-1',
+        intent: 'DENY',
+        label: 'Data Compliance Policy'
+    },
+    {
+        source: 'source-4',
+        destination: 'destination-2',
+        intent: 'ALLOW',
+        label: 'User-Data Requests'
+    },
+    {
+        source: 'source-4',
+        destination: 'destination-5',
+        intent: 'ALLOW',
+        label: 'User-Data Requests'
+    },
+    {
+        source: 'source-5',
+        destination: 'destination-1',
+        intent: 'DENY',
+        label: 'Unknown Policy Name'
+    },
+    {
+        source: 'source-6',
+        destination: 'destination-1',
+        intent: 'ALLOW',
+        label: '3rd Part Service Data Ingestion'
+    },
+    {
+        source: 'source-1',
+        destination: 'destination-2',
+        intent: 'ALLOW',
+        label: 'Test Policy 3'
+    },
+    {
+        source: 'source-3',
+        destination: 'destination-2',
+        intent: 'ALLOW',
+        label: 'VIP Data'
+    },
+    {
+        source: 'source-4',
+        destination: 'destination-2',
+        intent: 'ALLOW',
+        label: 'Privileged'
+    },
+    {
+        source: 'source-1',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-2',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-3',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-4',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-5',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-6',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-7',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-8',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-9',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-10',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-11',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-12',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-15',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-18',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-21',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    },
+    {
+        source: 'source-24',
+        destination: 'destination-9',
+        intent: 'DENY',
+        label: 'Default DENY'
+    }
+];
