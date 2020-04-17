@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
 import * as d3Sankey from 'd3-sankey';
 
@@ -8,25 +8,24 @@ import * as d3Sankey from 'd3-sankey';
     styleUrls: ['./diagram.component.scss']
 })
 export class DiagramComponent implements OnInit {
-    constructor() {
-    };
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.drawChart(event);
+    }
 
     ngOnInit(): void {
-        this.drawChart();
-        // this.drawLine();
+        this.drawChart(null);
         // this.logExample();
     }
 
-    private drawChart() {
+    private drawChart(evt) {
         const groupBgColor = '#333';
         const groupTextColor = '#ddd';
         const trafficStrokeColor = '#2c0';
         const policyStrokeColor = '#ccc';
 
         const data = [];
-
-        const sources = d3.selectAll('.sources').selectAll('div');
-        const destinations = d3.selectAll('.destinations').selectAll('div');
 
         interface FlowEntry {
             source: string,
@@ -48,6 +47,8 @@ export class DiagramComponent implements OnInit {
             }
         ]
 
+        const chartContainer = d3.select(".chart-container");
+        const containerWidth = (chartContainer.node() as HTMLElement).getBoundingClientRect().width;
         const chart = d3.select(".chart");
         const chartRect = (chart.node() as HTMLElement).getBoundingClientRect();
 
@@ -61,12 +62,10 @@ export class DiagramComponent implements OnInit {
             coords.push([srcRect.right - chartRect.left, srcRect.top - chartRect.top + srcRect.height / 2]);
             coords.push([dstRect.left - chartRect.left, dstRect.top - chartRect.top + dstRect.height / 2]);
 
-            console.log(coords);
-
             this.drawConnectorLine(coords, trafficStrokeColor, policyStrokeColor);
         });
 
-        var width = 800,
+        var width = containerWidth,
             barHeight = 30;
 
         var x = d3.scaleLinear()
@@ -143,14 +142,6 @@ export class DiagramComponent implements OnInit {
         }
     }
 
-    private drawLine() {
-        const lines = d3.select("#lines")
-            .append("path")
-            .attr("d", d3.line()([[10, 60], [40, 90], [60, 10], [190, 10]]))
-            .attr("stroke", "black")
-            .attr("fill", 'transparent')
-    }
-
     private DrawChart() {
 
         let k = 1;
@@ -225,22 +216,8 @@ export class DiagramComponent implements OnInit {
                     name: "N" + n
                 });
             }
-            // console.log(nodes);
             return data;
         }
-
-        let san;
-
-        function sankeyDo() {
-            dataset = getNodesByCount(20, 20);
-            // dataset = datasets[2];
-            console.log('JSON.stringify(dataset)');
-            console.log(JSON.stringify(dataset, null, '  '));
-            sankey(dataset);
-            clearInterval(san);
-        }
-
-        sankeyDo();
 
         link = link
             .data(dataset.links)
