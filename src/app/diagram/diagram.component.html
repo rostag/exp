@@ -5,7 +5,12 @@
 <div class="diagram-container">
     <div class="diagram">
         <div class="sources">
-            <div *ngFor="let src of sources" [id]="src.id" class="list-item">{{src.label}}</div>
+            <div class="section-title">User Groups <span>13</span></div>
+            <div *ngFor="let src of byType(sources, 'user')" [id]="src.id" class="list-item">{{src.label}}</div>
+            <div class="section-title">Service Groups <span>4</span></div>
+            <div *ngFor="let src of  byType(sources, 'service')" [id]="src.id" class="list-item">{{src.label}}</div>
+            <div class="section-title">Node Groups <span>6</span></div>
+            <div *ngFor="let src of  byType(sources, 'node')" [id]="src.id" class="list-item">{{src.label}}</div>
         </div>
 
         <div class="chart-container">

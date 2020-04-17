@@ -9,6 +9,19 @@
         .diagram {
             display: flex;
 
+            .section-title {
+                font-size: 12px;
+                line-height: 18px;
+                color: #FFFFFF;
+
+                span {
+                    opacity: .7;
+                    margin-left: 12px;
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+            }
+
             .list-item {
                 border: 1px solid #bbb;
                 background-color: #333;

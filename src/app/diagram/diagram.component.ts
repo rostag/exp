@@ -277,6 +277,10 @@ export class DiagramComponent implements OnInit {
         }
     }
 
+    public byType(collection, type) {
+        return collection.filter(item => item.type === type);
+    }
+
     private testChart() {
         // node.append("text")
         //     .attr("x", function (d: any) { return d.x0 - 6; })
