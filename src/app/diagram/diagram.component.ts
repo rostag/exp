@@ -10,12 +10,13 @@ import * as d3Sankey from 'd3-sankey';
 export class DiagramComponent implements OnInit {
 
     barHeight = 30;
-    groupBgColor = '#333';
     groupTextColor = '#ddd';
 
     rectWidth = 5;
 
     // Traffic line
+    flowCapColor = 'rgba(255, 255, 255, 0.31)';
+
     trafficStrokeColor = '#ccc';
     trafficStrokeOpacity = .5;
     trafficStrokeColorSelected = '#2c0';
@@ -187,7 +188,7 @@ export class DiagramComponent implements OnInit {
         // Draw rectangles
         chart
             .append('rect')
-            .style('fill', this.groupBgColor)
+            .style('fill', this.flowCapColor)
             .attr('x', data[0][0])
             .attr('y', data[0][1] - this.barHeight / 2)
             .attr('width', this.rectWidth)
@@ -195,7 +196,7 @@ export class DiagramComponent implements OnInit {
 
         chart
             .append('rect')
-            .style('fill', this.groupBgColor)
+            .style('fill', this.flowCapColor)
             .attr('x', data[4][0] - this.rectWidth)
             .attr('y', data[4][1] - this.barHeight / 2)
             .attr('width', this.rectWidth)
