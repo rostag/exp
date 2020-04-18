@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as d3 from 'd3';
-import { sources, destinations, flowEntries } from './data-mocks';
+import { sources, destinations, flowEntries, gates } from './data-mocks';
 
 export interface FlowEntry {
   source: string;
@@ -31,6 +31,7 @@ export class FlowDiagramComponent implements OnInit {
   public sources = sources;
   public destinations = destinations;
   public flowEntries = flowEntries;
+  public gates = gates;
 
   barHeight = 24;
 
@@ -116,13 +117,13 @@ export class FlowDiagramComponent implements OnInit {
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawConnectorLine(coords, gate);
+      this.drawFlowline(coords, gate);
     });
   }
 
-  private drawConnectorLine(data, gate) {
+  private drawFlowline(coords, gate) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
-    const points: [number, number][] = data;
+    const points: [number, number][] = coords;
     const pathData = gate.intent === 'ALLOW' ? lineGenerator(points) : lineGenerator(points.slice(0, 3));
     const chart = d3.select('.chart');
 
@@ -130,16 +131,16 @@ export class FlowDiagramComponent implements OnInit {
     chart
       .append('rect')
       .style('fill', this.flowCapColor)
-      .attr('x', data[0][0])
-      .attr('y', data[0][1] - this.barHeight / 2)
+      .attr('x', coords[0][0])
+      .attr('y', coords[0][1] - this.barHeight / 2)
       .attr('width', this.flowCapWidth)
       .attr('height', this.barHeight - 1);
 
     chart
       .append('rect')
       .style('fill', this.flowCapColor)
-      .attr('x', data[4][0] - this.flowCapWidth)
-      .attr('y', data[4][1] - this.barHeight / 2)
+      .attr('x', coords[4][0] - this.flowCapWidth)
+      .attr('y', coords[4][1] - this.barHeight / 2)
       .attr('width', this.flowCapWidth)
       .attr('height', this.barHeight - 1);
 
@@ -152,32 +153,41 @@ export class FlowDiagramComponent implements OnInit {
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
       .attr('d', pathData);
 
-    chart
-      .append('circle')
-      .data([points[2]])
-      .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
-      .style('stroke', this.gateStrokeColor)
-      .attr('cx', function(d) {
-        return d[0];
-      })
-      .attr('cy', function(d) {
-        return d[1];
-      })
-      .attr('r', this.gateWidth / 2);
+    // chart
+    //   .append('circle')
+    //   .data([points[2]])
+    //   .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
+    //   .style('stroke', this.gateStrokeColor)
+    //   .attr('cx', function(d) {
+    //     return d[0];
+    //   })
+    //   .attr('cy', function(d) {
+    //     return d[1];
+    //   })
+    //   .attr('r', this.gateWidth / 2);
 
-    chart
-      .append('text')
-      .style('fill', this.gateLabelColor)
-      .attr('font-size', this.gateFontSize)
-      .attr('text-anchor', 'middle')
-      .attr('x', points[2][0])
-      .attr('y', points[2][1])
-      .attr('dy', '20px')
-      .text(gate.label);
+    // chart
+    //   .append('text')
+    //   .style('fill', this.gateLabelColor)
+    //   .attr('font-size', this.gateFontSize)
+    //   .attr('text-anchor', 'middle')
+    //   .attr('x', points[2][0])
+    //   .attr('y', points[2][1])
+    //   .attr('dy', '20px')
+    //   .text(gate.label);
   }
 
   public byType(collection, type) {
     return collection.filter(item => item.type === type);
+  }
+
+  public selectGate(gate) {
+    console.log('Select gate:', gate);
+  }
+
+  public getGates() {
+    console.log('get gates', this.gates);
+    return this.gates;
   }
 
   public selectFlow(item) {

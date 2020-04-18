@@ -283,3 +283,49 @@ export const flowEntries: FlowEntry[] = [
     label: 'Allow Traffic',
   },
 ];
+
+export const gates = [
+  {
+    source: 'source-1',
+    destination: 'destination-1',
+    intent: 'DENY',
+    label: 'Internet Users',
+    id: 'gate-1'
+  },
+  {
+    source: 'source-3',
+    destination: 'destination-1',
+    intent: 'DENY',
+    label: 'Data Compliance Policy',
+    id: 'gate-2'
+  },
+  {
+    source: 'source-4',
+    destination: 'destination-2',
+    intent: 'ALLOW',
+    label: 'User-Data Requests',
+    id: 'gate-3',
+    selected: true,
+  },
+  {
+    source: 'source-4',
+    destination: 'destination-5',
+    intent: 'ALLOW',
+    label: 'User-Data Requests',
+    id: 'gate-4',
+  },
+  {
+    source: 'source-5',
+    destination: 'destination-9',
+    intent: 'DENY',
+    label: 'Unknown Policy Name',
+    id: 'gate-5',
+  },
+  {
+    source: 'source-6',
+    destination: 'destination-9',
+    intent: 'ALLOW',
+    label: '3rd Part Service Data Ingestion',
+    id: 'gate-6'
+  }
+];
