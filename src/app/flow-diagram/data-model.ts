@@ -22,6 +22,7 @@ export interface ResourceGroup {
     id: string;
     label: string;
     type: string;
+    selected?: boolean;
 }
 
 export interface Gate {

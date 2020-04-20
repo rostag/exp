@@ -41,7 +41,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   gateHeight = 23;
   gateLabelColor = '#ddd';
   gateFontSize = 10;
-  selectedItem: any;
+  selectedSource: ResourceGroup;
 
   private chartContainer;
 
@@ -61,7 +61,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.renderFilters();
 
-    this.selectedItem = streams[3];
+    this.selectedSource = this.sources[1];
   }
 
   ngAfterViewInit(): void {
@@ -226,10 +226,10 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
   }
 
-  public selectSource(stream: Stream) {
-    this.selectedItem.selected = false;
-    this.selectedItem = stream;
-    this.selectedItem.selected = true;
+  public selectSource(src: ResourceGroup) {
+    this.selectedSource.selected = false;
+    this.selectedSource = src;
+    this.selectedSource.selected = true;
 
     this.drawChart();
   }
