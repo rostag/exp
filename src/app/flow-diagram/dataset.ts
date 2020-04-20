@@ -238,6 +238,24 @@ export const streams: Stream[] = [
     srcVolume: 5,
   },
   {
+    srcId: 'source-7',
+    dstId: 'destination-2',
+    label: '3rd Part Service Data Ingestion',
+    srcVolume: 5,
+  },
+  {
+    srcId: 'source-8',
+    dstId: 'destination-2',
+    label: '3rd Part Service Data Ingestion',
+    srcVolume: 2,
+  },
+  {
+    srcId: 'source-9',
+    dstId: 'destination-2',
+    label: '3rd Part Service Data Ingestion',
+    srcVolume: 15,
+  },
+  {
     srcId: 'source-1',
     dstId: 'destination-8',
     label: 'Test Policy 3',
