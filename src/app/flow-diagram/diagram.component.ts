@@ -15,17 +15,17 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   public sources = sources;
   public destinations = destinations;
-  public flowEntries = streams;
+  public streams = streams;
   public gates = gates;
 
   public rawSources = sources.concat();
   public rawDestinations = destinations.concat();
-  public rawFlowEntries = streams.concat();
+  public rawStreams = streams.concat();
   public rawGates = gates.concat();
 
   barHeight = 24;
 
-  // Flow line
+  // Stream line
   flowCapColor = 'rgba(195, 195, 195, 1)';
   flowStrokeColor = '#ccc';
   flowStrokeOpacity = 0.5;
@@ -74,7 +74,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.sources = filteredBySource.sources.concat();
     this.destinations = filteredBySource.destinations.concat();
     this.gates = filteredBySource.gates.concat();
-    this.flowEntries = filteredBySource.streams.concat();
+    this.streams = filteredBySource.streams.concat();
   }
 
   private drawChart() {
@@ -94,7 +94,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     const chartWidth = chartContainerWidth;
 
-    chart.attr('width', chartWidth).attr('height', this.barHeight * this.flowEntries.length + 500);
+    chart.attr('width', chartWidth).attr('height', this.barHeight * this.streams.length + 500);
 
     const streamGroup = chart
       .append('g');
@@ -104,7 +104,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     this.drawGates(chart, gateGroup);
 
-    this.flowEntries.forEach((stream: Stream) => {
+    this.streams.forEach((stream: Stream) => {
       const controlRatio = 3;
       const coords: Coordinates = [];
       const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
@@ -233,7 +233,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
     );
     // Take only flow entries which has filtered sources
-    const filteredStreams = this.flowEntries.filter(
+    const filteredStreams = this.streams.filter(
       flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
     );
     // Take only destinations which
@@ -259,7 +259,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   private filterByDestination(type: string): RenderModel {
     const filteredSources = this.sources;
     const filteredGates = this.gates;
-    const filteredStreams = this.flowEntries;
+    const filteredStreams = this.streams;
     const filteredDestinations = this.destinations.filter(destination => destination.type === type);
     return {
       sources: filteredSources,
@@ -279,7 +279,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.selectedSource.selected = true;
 
     // Select related streams
-    this.flowEntries.forEach(stream => stream.selected = false);
+    this.streams.forEach(stream => stream.selected = false);
     const selStreams: Stream[] = this.getStreamsBySource(src);
     selStreams.forEach(stream => stream.selected = true);
 
@@ -287,6 +287,6 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   private getStreamsBySource(src: ResourceGroup): Stream[] {
-    return this.flowEntries.filter(stream => stream.source === src.id);
+    return this.streams.filter(stream => stream.source === src.id);
   }
 }
