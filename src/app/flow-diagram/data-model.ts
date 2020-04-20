@@ -40,3 +40,6 @@ export enum POLICY_INTENT {
     destinations: ResourceGroup[];
   }
   
+  export interface Coordinates extends Array<[number, number]> {
+      
+  };

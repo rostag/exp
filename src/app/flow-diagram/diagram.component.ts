@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
 import * as d3 from 'd3';
 import { sources, destinations, streams, gates } from './data-mocks';
-import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, ResourceGroup } from './data-model';
+import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, ResourceGroup, Coordinates } from './data-model';
 
 @Component({
   selector: 'app-flow-diagram',
@@ -101,7 +101,7 @@ export class FlowDiagramComponent implements OnInit {
 
     this.flowEntries.forEach((stream: Stream) => {
       const controlRatio = 3;
-      const coords = [];
+      const coords: Coordinates = [];
       const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
       const dstEl = d3.select(`#${stream.destination}`).node() as HTMLElement;
       
@@ -126,8 +126,8 @@ export class FlowDiagramComponent implements OnInit {
       const gate: Gate = this.getGateByStream(stream) || this.defaultGate;
       const gateSelection = d3.select(`#${gate.id}`);
 
-      const gateX = gateSelection.attr('cx');
-      const gateY = gateSelection.attr('cy');
+      const gateX = parseFloat(gateSelection.attr('cx'));
+      const gateY = parseFloat(gateSelection.attr('cy'));
 
       coords.push([startX, startY]);
       coords.push([control1X, control1Y]);
@@ -139,7 +139,7 @@ export class FlowDiagramComponent implements OnInit {
     });
   }
 
-  private drawStream(coords, gate: Gate, stream: Stream) {
+  private drawStream(coords: Coordinates, gate: Gate, stream: Stream) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
     const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
