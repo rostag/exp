@@ -1,4 +1,4 @@
-import { ResourceGroup, FlowEntry as Stream, Policy as Gate, RESOURCE_GROUP_TYPE, POLICY_INTENT } from './data-model';
+import { ResourceGroup, Stream, Gate, RESOURCE_GROUP_TYPE, POLICY_INTENT } from './data-model';
 
 export const sources: ResourceGroup[] = [
   {

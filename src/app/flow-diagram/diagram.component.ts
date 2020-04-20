@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnInit, HostListener, Input, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { sources, destinations, streams, gates } from './data-mocks';
 import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, ResourceGroup, Coordinates } from './data-model';
@@ -8,10 +8,10 @@ import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, Resource
   templateUrl: './diagram.component.html',
   styleUrls: ['./diagram.component.scss'],
 })
-export class FlowDiagramComponent implements OnInit {
+export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
-  @Input('srcType') srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
-  @Input('destinationType') dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
+  @Input() srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
+  @Input() dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
 
   public sources = sources;
   public destinations = destinations;
@@ -104,7 +104,7 @@ export class FlowDiagramComponent implements OnInit {
       const coords: Coordinates = [];
       const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
       const dstEl = d3.select(`#${stream.destination}`).node() as HTMLElement;
-      
+
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
 
@@ -150,7 +150,7 @@ export class FlowDiagramComponent implements OnInit {
       .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
       .style('opacity', stream.selected ? 1 : this.flowStrokeOpacity)
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
-      .attr('d', pathData)
+      .attr('d', pathData);
   }
 
   public drawGates(chart) {
@@ -171,7 +171,7 @@ export class FlowDiagramComponent implements OnInit {
     const layoutY = i => layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i);
 
     for (let i = 0; i < gates.length; i++) {
-      let gate = gates[i];
+      const gate = gates[i];
       chart
         .append('circle')
         .data([gate])
@@ -208,8 +208,7 @@ export class FlowDiagramComponent implements OnInit {
   }
 
   private getGateByStream(stream: Stream): Gate {
-    const gate: Gate = this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
-    return gate;
+    return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
   }
 
   public selectFlow(item) {
@@ -222,13 +221,17 @@ export class FlowDiagramComponent implements OnInit {
 
   private filterBySource(type: RESOURCE_GROUP_TYPE): RenderModel {
 
-    const filteredSources = this.sources.filter(source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL)
+    const filteredSources = this.sources.filter(source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only gates which has at least one source of the given type - or DEFAULT gate
-    const filteredGates = this.gates.filter(gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
+    const filteredGates = this.gates.filter(
+      gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+    );
     // Take only flow entries which has filtered sources
-    const filteredStreams = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
-    // Take only destinations which 
-    const filteredDestinations = this.destinations; //.filter(flow => this.getSourcesByGate(gate).filter(src => src.type === type ) )
+    const filteredStreams = this.flowEntries.filter(
+      flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+    );
+    // Take only destinations which
+    const filteredDestinations = this.destinations;
     return {
       sources: filteredSources,
       gates: filteredGates,
