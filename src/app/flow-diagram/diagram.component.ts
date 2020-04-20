@@ -5,7 +5,6 @@ import { sources, destinations, flowEntries, gates } from './data-mocks';
 export interface FlowEntry {
   source: string;
   destination: string;
-  intent: string;
   label: string;
   selected?: boolean;
 }
@@ -142,22 +141,13 @@ export class FlowDiagramComponent implements OnInit {
       .style('stroke', gate.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
       .style('opacity', gate.selected ? 1 : this.flowStrokeOpacity)
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
-      .attr('d', pathData);
-
-    chart
-      .append('text')
-      .style('fill', this.gateLabelColor)
-      .attr('font-size', this.gateFontSize)
-      .attr('text-anchor', 'middle')
-      .attr('x', coords[2][0])
-      .attr('y', coords[2][1])
-      .attr('dy', '20px')
-      .text(gate.label);
+      .attr('d', pathData)
   }
 
   public drawGates(chart) {
     const gateMarginTop = 100;
     const gateOuterHeight = 50;
+    const gateLabelOffset = 10;
     const chartWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
 
     const layout = 'SINGLE';
@@ -168,6 +158,9 @@ export class FlowDiagramComponent implements OnInit {
     const multiLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
     const multiLayoutY = i => i * gateOuterHeight + gateMarginTop;
 
+    const layoutX = i => layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i);
+    const layoutY = i => layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i);
+
     for (let i = 0; i < gates.length; i++) {
       const gate = gates[i];
       chart
@@ -175,9 +168,20 @@ export class FlowDiagramComponent implements OnInit {
         .data([gate])
         .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
         .style('stroke', this.gateStrokeColor)
-        .attr('cx', layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i))
-        .attr('cy', layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i))
+        .attr('cx', layoutX(i))
+        .attr('cy', layoutY(i))
         .attr('r', this.gateWidth / 2);
+
+      chart
+        .append('text')
+        .style('fill', this.gateLabelColor)
+        .attr('font-size', this.gateFontSize)
+        .attr('text-anchor', 'middle')
+        .attr('x', layoutX(i))
+        .attr('y', layoutY(i) + gateLabelOffset)
+        .attr('dy', '20px')
+        .text(gate.label);
+
     }
   }
 
