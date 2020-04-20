@@ -2,15 +2,15 @@
   <div class="diagram">
     <div class="sources">
       <div class="section-title">User Groups <span>13</span></div>
-      <div *ngFor="let src of byType(sources, 'USER')" [id]="src.id" class="list-item" (click)="selectFlow(src)" title="{{src.id}}">
+      <div *ngFor="let src of byType(sources, 'USER')" [id]="src.id" class="list-item" (click)="selectSource(src)" title="{{src.id}}">
         {{ src.label }}
       </div>
       <div class="section-title">Service Groups <span>4</span></div>
-      <div *ngFor="let src of byType(sources, 'SERVICE')" [id]="src.id" class="list-item" (click)="selectFlow(src)" title="{{src.id}}">
+      <div *ngFor="let src of byType(sources, 'SERVICE')" [id]="src.id" class="list-item" (click)="selectSource(src)" title="{{src.id}}">
         {{ src.label }}
       </div>
       <div class="section-title">Node Groups <span>6</span></div>
-      <div *ngFor="let src of byType(sources, 'NODE')" [id]="src.id" class="list-item" (click)="selectFlow(src)" title="{{src.id}}">
+      <div *ngFor="let src of byType(sources, 'NODE')" [id]="src.id" class="list-item" (click)="selectSource(src)" title="{{src.id}}">
         {{ src.label }}
       </div>
     </div>

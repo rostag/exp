@@ -97,7 +97,13 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     chart.attr('width', chartWidth).attr('height', this.barHeight * this.flowEntries.length + 500);
 
-    this.drawGates(chart);
+    const streamGroup = chart
+      .append('g');
+
+    const gateGroup = chart
+      .append('g');
+
+    this.drawGates(chart, gateGroup);
 
     this.flowEntries.forEach((stream: Stream) => {
       const controlRatio = 3;
@@ -137,7 +143,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
         coords.push([control1X, control1Y]);
         coords.push([gateX, gateY]);
         coords.push([control2X, control2Y]);
-        coords.push([endX, endY]);  
+        coords.push([endX, endY]);
       } else {
         coords.push([startX, startY]);
         coords.push([control1X, control1Y]);
@@ -147,15 +153,13 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
       const lineGenerator = d3.line().curve(d3.curveBasis);
       const pathData = lineGenerator(coords);
-  
-      this.drawStream(coords, pathData, stream);
+
+      this.drawStream(coords, pathData, stream, streamGroup);
     });
   }
 
-  private drawStream(coords: Coordinates, pathData: any, stream: Stream) {
-    const chart = d3.select('.chart');
-
-    chart
+  private drawStream(coords: Coordinates, pathData: any, stream: Stream, streamGroup) {
+    streamGroup
       .append('path')
       .style('fill', 'none')
       .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
@@ -164,7 +168,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       .attr('d', pathData);
   }
 
-  public drawGates(chart) {
+  public drawGates(chart, gateGroup) {
     const gateMarginTop = 100;
     const gateOuterHeight = 50;
     const gateLabelOffset = 10;
@@ -183,7 +187,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     for (let i = 0; i < gates.length; i++) {
       const gate = gates[i];
-      chart
+      gateGroup
         .append('circle')
         .data([gate])
         .style('fill', gate.intent === POLICY_INTENT.ALLOW ? this.gateAllowFillColor : this.gateDenyFillColor)
@@ -193,7 +197,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
         .attr('r', this.gateWidth / 2)
         .attr('id', gate.id);
 
-      chart
+      gateGroup
         .append('text')
         .style('fill', this.gateLabelColor)
         .attr('font-size', this.gateFontSize)
@@ -222,7 +226,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
   }
 
-  public selectStream(stream: Stream) {
+  public selectSource(stream: Stream) {
     this.selectedItem.selected = false;
     this.selectedItem = stream;
     this.selectedItem.selected = true;
