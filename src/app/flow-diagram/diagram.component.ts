@@ -1,6 +1,7 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
 import * as d3 from 'd3';
 import { sources, destinations, flowEntries, gates } from './data-mocks';
+import { threadId } from 'worker_threads';
 
 export interface FlowEntry {
   source: string;
@@ -24,16 +25,32 @@ export interface Policy {
   selected?: boolean;
 }
 
+export interface RenderModel {
+  sources: ResourceGroup[];
+  gates: Policy[];
+  connections: FlowEntry[];
+  destinations: ResourceGroup[]
+}
+
 @Component({
   selector: 'app-flow-diagram',
   templateUrl: './diagram.component.html',
   styleUrls: ['./diagram.component.scss'],
 })
 export class FlowDiagramComponent implements OnInit {
+
+  @Input('srcType') srcType: string = 'user';
+  @Input('destinationType') dstType: string = 'data';
+
   public sources = sources;
   public destinations = destinations;
   public flowEntries = flowEntries;
   public gates = gates;
+
+  public rawSources = sources.concat();
+  public rawDestinations = destinations.concat();
+  public rawFlowEntries = flowEntries.concat();
+  public rawGates = gates.concat();
 
   barHeight = 24;
 
@@ -71,12 +88,23 @@ export class FlowDiagramComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.renderFilters();
+
     this.selectedItem = flowEntries[3];
-    this.gates.push(this.defaultGate);
   }
 
   ngAfterViewInit(): void {
     this.drawChart();
+  }
+
+  private renderFilters() {
+    this.gates.push(this.defaultGate);
+
+    const filteredBySource: RenderModel = this.filterBySource(this.srcType);
+    this.sources = filteredBySource.sources.concat();
+    this.destinations = filteredBySource.destinations.concat();
+    this.gates = filteredBySource.gates.concat();
+    this.flowEntries = filteredBySource.connections.concat();
   }
 
   private drawChart() {
@@ -106,6 +134,8 @@ export class FlowDiagramComponent implements OnInit {
       const srcEl = d3.select(`#${connection.source}`).node() as HTMLElement;
       const dstEl = d3.select(`#${connection.destination}`).node() as HTMLElement;
 
+      console.log('RECT:', connection.source);
+      
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
 
@@ -127,8 +157,9 @@ export class FlowDiagramComponent implements OnInit {
       const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
       const gateSelection = d3.select(`#${gate.id}`);
 
-      console.log('GGG:', gateSelection.attr('cx'));
-      
+      console.log('GGG:', gate.id, gate.source );
+      console.log('GG:', gateSelection.attr('cx'));
+
       const gateX = gateSelection.attr('cx');
       const gateY = gateSelection.attr('cy');
 
@@ -223,5 +254,48 @@ export class FlowDiagramComponent implements OnInit {
     this.selectedItem.selected = true;
 
     this.drawChart();
+  }
+
+  private filterBySource(type: string): RenderModel {
+    const filteredSources = this.sources.filter(source => source.type === type)
+    // Take only gates which has at least one source of the given type - or DEFAULT gate
+    const filteredGates = this.gates.filter(gate => gate.source === '*' || this.getSourceById(gate.source).type === type);
+    // Take only flow entries which has filtered sources
+    const filteredConnections = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type);
+    // Take only destinations which 
+    const filteredDestinations = this.destinations; //.filter(flow => this.getSourcesByGate(gate).filter(src => src.type === type ) )
+    return {
+      sources: filteredSources,
+      gates: filteredGates,
+      connections: filteredConnections,
+      destinations: filteredDestinations
+    };
+  }
+
+  private getSourcesByGate(gate): ResourceGroup[] {
+    const result = this.sources.filter(src => src.id === gate.source);
+    return result;
+  }
+
+  private getSourceById(srcId: string): ResourceGroup {
+    const result = this.sources.find(src => src.id === srcId);
+    return result;
+  }
+
+  private filterByDestination(type: string): RenderModel {
+    const filteredSources = this.sources;
+    const filteredGates = this.gates;
+    const filteredConnections = this.flowEntries;
+    const filteredDestinations = this.destinations.filter(destination => destination.type === type);
+    return {
+      sources: filteredSources,
+      gates: filteredGates,
+      connections: filteredConnections,
+      destinations: filteredDestinations
+    };
+  }
+
+  private filterByGate(type: string): ResourceGroup[] {
+    return null;
   }
 }
