@@ -74,7 +74,7 @@ export class FlowDiagramComponent implements OnInit {
 
   private drawChart() {
     this.chartContainer = d3.select('.chart-container');
-    
+
     // Clean up before re-rendering
     this.chartContainer
       .selectAll('*')
@@ -156,11 +156,17 @@ export class FlowDiagramComponent implements OnInit {
   }
 
   public drawGates(chart) {
-    console.log('Gates:', this.gates);
-
     const gateMarginTop = 100;
     const gateOuterHeight = 50;
     const chartWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
+
+    const layout = 'SINGLE';
+
+    const singleLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
+    const singleLayoutY = i => i * gateOuterHeight + gateMarginTop;
+
+    const multiLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
+    const multiLayoutY = i => i * gateOuterHeight + gateMarginTop;
 
     for (let i = 0; i < gates.length; i++) {
       const gate = gates[i];
@@ -169,12 +175,8 @@ export class FlowDiagramComponent implements OnInit {
         .data([gate])
         .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
         .style('stroke', this.gateStrokeColor)
-        .attr('cx', d => {
-          return chartWidth / 2 - this.gateWidth / 4;
-        })
-        .attr('cy', d => {
-          return i * gateOuterHeight + gateMarginTop;
-        })
+        .attr('cx', layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i))
+        .attr('cy', layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i))
         .attr('r', this.gateWidth / 2);
     }
   }
