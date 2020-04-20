@@ -1,7 +1,18 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
 import * as d3 from 'd3';
 import { sources, destinations, flowEntries, gates } from './data-mocks';
-import { threadId } from 'worker_threads';
+
+export enum POLICY_INTENT {
+  ALLOW = 'ALLOW', 
+  DENY = 'DENY'
+}
+
+export enum RESOURCE_GROUP_TYPE {
+  USER = 'USER', 
+  NODE = 'NODE',
+  SERVICE = 'SERVICE',
+  DATA = 'DATA'
+}
 
 export interface FlowEntry {
   source: string;
@@ -39,8 +50,8 @@ export interface RenderModel {
 })
 export class FlowDiagramComponent implements OnInit {
 
-  @Input('srcType') srcType: string = 'user';
-  @Input('destinationType') dstType: string = 'data';
+  @Input('srcType') srcType: string = RESOURCE_GROUP_TYPE.USER;
+  @Input('destinationType') dstType: string = RESOURCE_GROUP_TYPE.DATA;
 
   public sources = sources;
   public destinations = destinations;
@@ -76,7 +87,7 @@ export class FlowDiagramComponent implements OnInit {
 
   private defaultGate: Policy = {
     id: 'default-gate',
-    intent: 'ALLOW',
+    intent: POLICY_INTENT.ALLOW,
     source: '*',
     destination: '*',
     label: 'Default ALLOW'
@@ -133,8 +144,6 @@ export class FlowDiagramComponent implements OnInit {
       const coords = [];
       const srcEl = d3.select(`#${connection.source}`).node() as HTMLElement;
       const dstEl = d3.select(`#${connection.destination}`).node() as HTMLElement;
-
-      console.log('RECT:', connection.source);
       
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
@@ -157,9 +166,6 @@ export class FlowDiagramComponent implements OnInit {
       const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
       const gateSelection = d3.select(`#${gate.id}`);
 
-      console.log('GGG:', gate.id, gate.source );
-      console.log('GG:', gateSelection.attr('cx'));
-
       const gateX = gateSelection.attr('cx');
       const gateY = gateSelection.attr('cy');
 
@@ -175,7 +181,7 @@ export class FlowDiagramComponent implements OnInit {
 
   private drawStream(coords, gate: Policy, connection: FlowEntry) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
-    const pathData = gate.intent === 'ALLOW' ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
+    const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
 
     chart
@@ -209,7 +215,7 @@ export class FlowDiagramComponent implements OnInit {
       chart
         .append('circle')
         .data([gate])
-        .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
+        .style('fill', gate.intent === POLICY_INTENT.ALLOW ? this.gateAllowFillColor : this.gateDenyFillColor)
         .style('stroke', this.gateStrokeColor)
         .attr('cx', layoutX(i))
         .attr('cy', layoutY(i))
