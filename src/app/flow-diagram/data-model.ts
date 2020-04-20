@@ -25,6 +25,7 @@ export interface ResourceGroup {
   label: string;
   type: string;
   selected?: boolean;
+  expanded?: boolean;
 }
 
 export interface Gate {

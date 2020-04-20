@@ -294,4 +294,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   private getStreamsBySource(src: ResourceGroup): Stream[] {
     return this.streams.filter(stream => stream.srcId === src.id);
   }
+
+  public expandSource(src: ResourceGroup) {
+    src.expanded = !src.expanded;
+  }
 }
