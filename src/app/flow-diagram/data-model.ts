@@ -16,6 +16,8 @@ export interface Stream {
     dstId: string;
     label: string;
     selected?: boolean;
+    srcVolume?: number;
+    gatedVolume?: number;
 }
 
 export interface ResourceGroup {

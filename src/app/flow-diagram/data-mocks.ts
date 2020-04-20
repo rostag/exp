@@ -176,66 +176,80 @@ export const streams: Stream[] = [
     srcId: 'source-1',
     dstId: 'destination-1',
     label: 'Internet Users',
+    srcVolume: 15,
+    gatedVolume: 5
   },
   {
     srcId: 'source-3',
     dstId: 'destination-1',
     label: 'Data Compliance Policy',
+    srcVolume: 9,
   },
   {
     srcId: 'source-4',
     dstId: 'destination-2',
-    label: 'User-Data Requests'
+    label: 'User-Data Requests',
+    srcVolume: 2,
   },
   {
     srcId: 'source-4',
     dstId: 'destination-5',
-    label: 'User-Data Requests'
+    label: 'User-Data Requests',
+    srcVolume: 2,
   },
   {
     srcId: 'source-5',
     dstId: 'destination-9',
     label: 'Unknown Policy Name',
+    srcVolume: 19,
   },
   {
     srcId: 'source-6',
     dstId: 'destination-9',
     label: '3rd Part Service Data Ingestion',
+    srcVolume: 5,
   },
   {
     srcId: 'source-1',
     dstId: 'destination-8',
     label: 'Test Policy 3',
+    srcVolume: 4,
   },
   {
     srcId: 'source-3',
     dstId: 'destination-7',
     label: 'VIP Data',
+    srcVolume: 3,
   },
   {
     srcId: 'source-4',
     dstId: 'destination-9',
     label: 'Privileged',
+    srcVolume: 2,
   },
   {
     srcId: 'source-1',
     dstId: 'destination-8',
     label: POLICY_INTENT.DENY,
+    srcVolume: 8,
   },
   {
     srcId: 'source-11',
     dstId: 'destination-9',
     label: 'Allow incoming',
+    srcVolume: 7,
   },
   {
     srcId: 'source-12',
     dstId: 'destination-9',
     label: POLICY_INTENT.DENY,
+    srcVolume: 2,
   },
   {
     srcId: 'source-18',
     dstId: 'destination-9',
     label: 'Frankfurt Allowed',
+    srcVolume: 6,
   },
   {
     srcId: 'source-21',
@@ -246,11 +260,13 @@ export const streams: Stream[] = [
     srcId: 'source-14',
     dstId: 'destination-9',
     label: POLICY_INTENT.DENY,
+    srcVolume: 8,
   },
   {
     srcId: 'source-24',
     dstId: 'destination-9',
     label: 'Allow Traffic',
+    srcVolume: 2,
   },
 ];
 

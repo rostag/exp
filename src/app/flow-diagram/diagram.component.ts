@@ -163,7 +163,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       .style('fill', 'none')
       .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
       .style('opacity', stream.selected ? 1 : this.flowStrokeOpacity)
-      .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
+      .style('stroke-width', this.flowStrokeWidth + stream.srcVolume)
       .attr('d', pathData);
   }
 
