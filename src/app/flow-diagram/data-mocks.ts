@@ -180,6 +180,11 @@ export const streams: Stream[] = [
     gatedVolume: 5,
   },
   {
+    srcId: 'source-1',
+    dstId: 'destination-4',
+    label: 'Internet Users'
+  },
+  {
     srcId: 'source-3',
     dstId: 'destination-1',
     label: 'Data Compliance Policy',
@@ -195,13 +200,18 @@ export const streams: Stream[] = [
     srcId: 'source-4',
     dstId: 'destination-5',
     label: 'User-Data Requests',
-    srcVolume: 2,
+    srcVolume: 12,
   },
   {
     srcId: 'source-5',
     dstId: 'destination-9',
     label: 'Unknown Policy Name',
     srcVolume: 19,
+  },
+  {
+    srcId: 'source-5',
+    dstId: 'destination-5',
+    label: 'Unknown Policy Name'
   },
   {
     srcId: 'source-6',
@@ -265,6 +275,17 @@ export const streams: Stream[] = [
   {
     srcId: 'source-24',
     dstId: 'destination-9',
+    label: 'Allow Traffic',
+    srcVolume: 2,
+  },
+  {
+    srcId: 'source-16',
+    dstId: 'destination-1',
+    label: 'Allow Traffic',
+  },
+  {
+    srcId: 'source-16',
+    dstId: 'destination-5',
     label: 'Allow Traffic',
     srcVolume: 2,
   },

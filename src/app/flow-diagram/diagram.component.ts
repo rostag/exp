@@ -34,10 +34,10 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   // Stream line
   flowCapColor = 'rgba(195, 195, 195, 1)';
-  flowStrokeColor = '#ccc';
-  flowStrokeOpacity = 0.5;
-  flowStrokeColorSelected = '#2c0';
-  flowStrokeWidth = 1;
+  flowStrokeColor = 'rgba(255, 255, 255, 0.08)';
+  flowStrokeOpacity = 1;
+  flowStrokeColorSelected = 'rgba(89, 150, 28, 0.77)';
+  flowStrokeWidth = 2;
   flowCapWidth = 5;
 
   // Gate
@@ -167,8 +167,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       .append('path')
       .style('fill', 'none')
       .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
-      .style('opacity', stream.selected ? 1 : this.flowStrokeOpacity)
-      .style('stroke-width', this.flowStrokeWidth + stream.srcVolume)
+      .style('stroke-width', stream.srcVolume || this.flowStrokeWidth)
+      .style('stroke-dasharray', !isNaN(stream.srcVolume) && stream.srcVolume > 0 ? '0' : '5,5')
       .attr('d', pathData);
   }
 
