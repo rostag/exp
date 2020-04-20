@@ -1,4 +1,4 @@
-import { ResourceGroup, FlowEntry } from './diagram.component';
+import { ResourceGroup, FlowEntry, Policy } from './diagram.component';
 
 export const sources: ResourceGroup[] = [
   {
@@ -251,7 +251,7 @@ export const flowEntries: FlowEntry[] = [
   },
 ];
 
-export const gates = [
+export const gates: Policy[] = [
   {
     source: 'source-1',
     destination: 'destination-1',

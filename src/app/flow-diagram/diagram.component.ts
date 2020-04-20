@@ -16,9 +16,12 @@ export interface ResourceGroup {
 }
 
 export interface Policy {
-  id: string;
+  source: string;
+  destination: string;
   intent: string;
   label: string;
+  id: string;
+  selected?: boolean;
 }
 
 @Component({
@@ -54,6 +57,14 @@ export class FlowDiagramComponent implements OnInit {
 
   private chartContainer;
 
+  private defaultGate: Policy = {
+    id: 'default-gate',
+    intent: 'ALLOW',
+    source: '*',
+    destination: '*',
+    label: 'Default ALLOW'
+  };
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.drawChart();
@@ -61,14 +72,11 @@ export class FlowDiagramComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedItem = flowEntries[3];
+    this.gates.push(this.defaultGate);
   }
 
   ngAfterViewInit(): void {
     this.drawChart();
-  }
-
-  public policyByConnectionId(connId: string) {
-    return null
   }
 
   private drawChart() {
@@ -90,11 +98,11 @@ export class FlowDiagramComponent implements OnInit {
 
     chart.attr('width', chartWidth).attr('height', this.barHeight * this.flowEntries.length + 500);
 
-    this.flowEntries.forEach((gate: FlowEntry) => {
+    this.flowEntries.forEach((connection: FlowEntry) => {
       const controlRatio = 3;
       const coords = [];
-      const srcEl = d3.select(`#${gate.source}`).node() as HTMLElement;
-      const dstEl = d3.select(`#${gate.destination}`).node() as HTMLElement;
+      const srcEl = d3.select(`#${connection.source}`).node() as HTMLElement;
+      const dstEl = d3.select(`#${connection.destination}`).node() as HTMLElement;
 
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
@@ -123,23 +131,24 @@ export class FlowDiagramComponent implements OnInit {
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawStream(coords, gate);
+      this.drawStream(coords, connection);
     });
 
     this.drawGates(chart);
   }
 
-  private drawStream(coords, gate) {
+  private drawStream(coords, connection: FlowEntry) {
+    const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
+
     const lineGenerator = d3.line().curve(d3.curveBasis);
     const pathData = gate.intent === 'ALLOW' ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
 
-    // Line
     chart
       .append('path')
       .style('fill', 'none')
-      .style('stroke', gate.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
-      .style('opacity', gate.selected ? 1 : this.flowStrokeOpacity)
+      .style('stroke', connection.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
+      .style('opacity', connection.selected ? 1 : this.flowStrokeOpacity)
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
       .attr('d', pathData)
   }
@@ -162,7 +171,7 @@ export class FlowDiagramComponent implements OnInit {
     const layoutY = i => layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i);
 
     for (let i = 0; i < gates.length; i++) {
-      const gate = gates[i];
+      let gate = gates[i];
       chart
         .append('circle')
         .data([gate])
@@ -181,7 +190,6 @@ export class FlowDiagramComponent implements OnInit {
         .attr('y', layoutY(i) + gateLabelOffset)
         .attr('dy', '20px')
         .text(gate.label);
-
     }
   }
 
@@ -194,8 +202,12 @@ export class FlowDiagramComponent implements OnInit {
   }
 
   public getGates() {
-    console.log('get gates', this.gates);
     return this.gates;
+  }
+
+  private getGateByConnection(connection): Policy {
+    const gate: Policy = this.gates.find(gate => gate.source === connection.source && gate.destination === connection.destination);
+    return gate;
   }
 
   public selectFlow(item) {
