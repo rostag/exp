@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, Input, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
-import { sources, destinations, streams, gates } from './data-mocks';
+import { sources, destinations, streams, gates, config, defaultGate } from './dataset';
 import {
   RESOURCE_GROUP_TYPE,
   Gate,
@@ -20,45 +20,15 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   @Input() srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
   @Input() dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
 
+  public cnf = config;
   public sources = sources;
   public destinations = destinations;
   public streams = streams;
   public gates = gates;
-
-  public rawSources = sources.concat();
-  public rawDestinations = destinations.concat();
-  public rawStreams = streams.concat();
-  public rawGates = gates.concat();
-
-  barHeight = 24;
-
-  // Stream line
-  flowCapColor = 'rgba(195, 195, 195, 1)';
-  flowStrokeColor = 'rgba(255, 255, 255, 0.08)';
-  flowStrokeOpacity = 1;
-  flowStrokeColorSelected = 'rgba(89, 150, 28, 0.77)';
-  flowStrokeWidth = 2;
-  flowCapWidth = 5;
-
-  // Gate
-  gateStrokeColor = 'rgba(255, 255, 255, 0.7)';
-  gateDenyFillColor = '#C22100';
-  gateAllowFillColor = '#59961C';
-  gateWidth = 23;
-  gateHeight = 23;
-  gateLabelColor = '#ddd';
-  gateFontSize = 10;
-  selectedSource: ResourceGroup;
-
+  
+  private defaultGate = defaultGate;
+  private selectedSource: ResourceGroup;
   private chartContainer;
-
-  private defaultGate: Gate = {
-    id: 'default-gate',
-    intent: POLICY_INTENT.ALLOW,
-    srcId: '*',
-    dstId: '*',
-    label: 'Default ALLOW',
-  };
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -86,24 +56,23 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   private drawChart() {
     this.chartContainer = d3.select('.chart-container');
-
-    // Clean up before re-rendering
     this.chartContainer.selectAll('*').remove();
-
-    const chartContainerWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
+    
+    const chartContainerRect = (this.chartContainer.node() as HTMLElement).getBoundingClientRect();
+    const chartWidth = chartContainerRect.width;
+    const chartHeight = chartContainerRect.height;
+    
     const chart = this.chartContainer
       .append('svg')
+      .attr('width', chartWidth)
+      .attr('height', chartHeight)
       .attr('class', 'chart')
       .style('fill', '#fafafa');
-    const chartRect = (chart.node() as any).getBoundingClientRect();
-
-    const chartWidth = chartContainerWidth;
-
-    chart.attr('width', chartWidth).attr('height', this.barHeight * this.streams.length + 500);
 
     const streamGroup = chart.append('g');
-
     const gateGroup = chart.append('g');
+      
+    const chartRect = (chart.node() as any).getBoundingClientRect();
 
     this.drawGates(chart, gateGroup);
 
@@ -166,8 +135,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     streamGroup
       .append('path')
       .style('fill', 'none')
-      .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
-      .style('stroke-width', stream.srcVolume || this.flowStrokeWidth)
+      .style('stroke', stream.selected ? this.cnf.stream.flowStrokeColorSelected : this.cnf.stream.flowStrokeColor)
+      .style('stroke-width', stream.srcVolume || this.cnf.stream.flowStrokeWidth)
       .style('stroke-dasharray', !isNaN(stream.srcVolume) && stream.srcVolume > 0 ? '0' : '5,5')
       .attr('d', pathData);
   }
@@ -180,10 +149,10 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     const layout = 'SINGLE';
 
-    const singleLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
+    const singleLayoutX = i => chartWidth / 2 - this.cnf.gate.gateWidth / 8;
     const singleLayoutY = i => i * gateOuterHeight + gateMarginTop;
 
-    const multiLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
+    const multiLayoutX = i => chartWidth / 2 - this.cnf.gate.gateWidth / 8;
     const multiLayoutY = i => i * gateOuterHeight + gateMarginTop;
 
     const layoutX = i => (layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i));
@@ -194,17 +163,17 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       gateGroup
         .append('circle')
         .data([gate])
-        .style('fill', gate.intent === POLICY_INTENT.ALLOW ? this.gateAllowFillColor : this.gateDenyFillColor)
-        .style('stroke', this.gateStrokeColor)
+        .style('fill', gate.intent === POLICY_INTENT.ALLOW ? this.cnf.gate.gateAllowFillColor : this.cnf.gate.gateDenyFillColor)
+        .style('stroke', this.cnf.gate.gateStrokeColor)
         .attr('cx', layoutX(i))
         .attr('cy', layoutY(i))
-        .attr('r', this.gateWidth / 2)
+        .attr('r', this.cnf.gate.gateWidth / 2)
         .attr('id', gate.id);
 
       gateGroup
         .append('text')
-        .style('fill', this.gateLabelColor)
-        .attr('font-size', this.gateFontSize)
+        .style('fill', this.cnf.gate.gateLabelColor)
+        .attr('font-size', this.cnf.gate.gateFontSize)
         .attr('text-anchor', 'middle')
         .attr('x', layoutX(i))
         .attr('y', layoutY(i) + gateLabelOffset)

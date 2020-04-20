@@ -9,17 +9,17 @@
         *ngFor="let src of byType(sources, 'USER')"
         [id]="src.id"
         class="list-item"
-        [ngClass]="{'expanded': src.expanded}"
+        [ngClass]="{ expanded: src.expanded }"
         (mouseover)="selectSource(src)"
         (click)="selectSource(src)"
         title="{{ src.id }}"
       >
-        <div class="header">
+        <div class="item-header">
           <div class="expander" (click)="expandSource(src)">
-            <clr-icon shape="caret-right" *ngIf="!src.expanded"></clr-icon>
-            <clr-icon shape="caret-bottom" *ngIf="src.expanded"></clr-icon>
+            <clr-icon shape="caret" style="transform: rotate(90deg);" *ngIf="!src.expanded"></clr-icon>
+            <clr-icon shape="caret" style="transform: rotate(180deg);" *ngIf="src.expanded"></clr-icon>
           </div>
-          
+
           <div class="text">{{ src.label }}</div>
 
           <div class="meta">
@@ -31,7 +31,7 @@
             </svg>
           </div>
         </div>
-        <div class="contents">Group ID: {{src.id}}</div>
+        <div class="contents">Group ID: {{ src.id }}</div>
       </div>
       <div class="section-title">
         <clr-icon shape="applications" class="user-icon"></clr-icon>

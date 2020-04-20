@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlowDiagramComponent } from './diagram.component';
 
-describe('FlowDiagramComponent', () => {
+fdescribe('FlowDiagramComponent', () => {
   let component: FlowDiagramComponent;
   let fixture: ComponentFixture<FlowDiagramComponent>;
 

@@ -374,3 +374,33 @@ export const gates: Gate[] = [
     id: 'gate-9',
   },
 ];
+
+export const config = {
+  bar: {
+    height: 24
+  },
+  stream: {
+    flowStrokeColor: 'rgba(255, 255, 255, 0.08)',
+    flowStrokeOpacity: 1,
+    flowStrokeColorSelected: 'rgba(89, 150, 28, 0.77)',
+    flowStrokeWidth: 2,
+    flowCapWidth: 5,
+  },
+  gate: {
+    gateStrokeColor: 'rgba(255, 255, 255, 0.7)',
+    gateDenyFillColor: '#C22100',
+    gateAllowFillColor: '#59961C',
+    gateWidth: 23,
+    gateHeight: 23,
+    gateLabelColor: '#ddd',
+    gateFontSize: 10
+  }
+};
+
+export const defaultGate: Gate = {
+  id: 'default-gate',
+  intent: POLICY_INTENT.ALLOW,
+  srcId: '*',
+  dstId: '*',
+  label: 'Default ALLOW',
+}
