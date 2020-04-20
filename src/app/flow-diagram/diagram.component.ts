@@ -248,15 +248,16 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   public selectSource(src: ResourceGroup) {
-    this.selectedSource ? (this.selectedSource.selected = false) : null;
-    this.selectedSource = src;
-    this.selectedSource.selected = true;
-
     // Select related streams
     this.streams.forEach(stream => (stream.selected = false));
-    const selStreams: Stream[] = this.getStreamsBySource(src);
-    selStreams.forEach(stream => (stream.selected = true));
+    this.getStreamsBySource(src).forEach(stream => (stream.selected = true));
+    this.drawChart();
+  }
 
+  public setSource(src: ResourceGroup) {
+    this.selectedSource ? this.selectedSource.selected = false : null;
+    this.selectedSource = src;
+    this.selectedSource.selected = true;
     this.drawChart();
   }
 

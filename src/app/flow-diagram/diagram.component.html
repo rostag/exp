@@ -7,12 +7,11 @@
       </div>
       <div
         *ngFor="let src of byType(sources, 'USER')"
-        [id]="src.id"
-        class="list-item"
-        [ngClass]="{ expanded: src.expanded }"
+        [ngClass]="{ 'list-item': true, expanded: src.expanded, selected: src.selected }"
         (mouseover)="selectSource(src)"
-        (click)="selectSource(src)"
-        title="{{ src.id }}"
+        (click)="setSource(src)"
+        [title]="src.id"
+        [id]="src.id"
       >
         <div class="item-header">
           <div class="expander" (click)="expandSource(src)">
