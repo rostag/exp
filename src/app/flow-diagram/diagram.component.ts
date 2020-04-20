@@ -98,6 +98,8 @@ export class FlowDiagramComponent implements OnInit {
 
     chart.attr('width', chartWidth).attr('height', this.barHeight * this.flowEntries.length + 500);
 
+    this.drawGates(chart);
+
     this.flowEntries.forEach((connection: FlowEntry) => {
       const controlRatio = 3;
       const coords = [];
@@ -122,24 +124,25 @@ export class FlowDiagramComponent implements OnInit {
       const control2X = endX - distX / controlRatio;
       const control2Y = endY;
 
-      const midX = startX + distX / 2;
-      const midY = startY + distY / 2;
+      const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
+      const gateSelection = d3.select(`#${gate.id}`);
+
+      console.log('GGG:', gateSelection.attr('cx'));
+      
+      const gateX = gateSelection.attr('cx');
+      const gateY = gateSelection.attr('cy');
 
       coords.push([startX, startY]);
       coords.push([control1X, control1Y]);
-      coords.push([midX, midY]);
+      coords.push([gateX, gateY]);
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawStream(coords, connection);
+      this.drawStream(coords, gate, connection);
     });
-
-    this.drawGates(chart);
   }
 
-  private drawStream(coords, connection: FlowEntry) {
-    const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
-
+  private drawStream(coords, gate: Policy, connection: FlowEntry) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
     const pathData = gate.intent === 'ALLOW' ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
@@ -179,7 +182,8 @@ export class FlowDiagramComponent implements OnInit {
         .style('stroke', this.gateStrokeColor)
         .attr('cx', layoutX(i))
         .attr('cy', layoutY(i))
-        .attr('r', this.gateWidth / 2);
+        .attr('r', this.gateWidth / 2)
+        .attr('id', gate.id);
 
       chart
         .append('text')
@@ -189,7 +193,8 @@ export class FlowDiagramComponent implements OnInit {
         .attr('x', layoutX(i))
         .attr('y', layoutY(i) + gateLabelOffset)
         .attr('dy', '20px')
-        .text(gate.label);
+        .text(gate.label)
+        .attr('id', gate.id + '-label');
     }
   }
 
