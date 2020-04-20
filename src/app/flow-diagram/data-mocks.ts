@@ -177,7 +177,7 @@ export const streams: Stream[] = [
     dstId: 'destination-1',
     label: 'Internet Users',
     srcVolume: 15,
-    gatedVolume: 5
+    gatedVolume: 5,
   },
   {
     srcId: 'source-3',
@@ -276,21 +276,21 @@ export const gates: Gate[] = [
     dstId: 'destination-1',
     intent: POLICY_INTENT.DENY,
     label: 'Internet Users',
-    id: 'gate-1'
+    id: 'gate-1',
   },
   {
     srcId: 'source-3',
     dstId: 'destination-1',
     intent: POLICY_INTENT.DENY,
     label: 'Data Compliance Policy',
-    id: 'gate-2'
+    id: 'gate-2',
   },
   {
     srcId: 'source-4',
     dstId: 'destination-2',
     intent: POLICY_INTENT.ALLOW,
     label: 'User-Data Requests',
-    id: 'gate-3'
+    id: 'gate-3',
   },
   {
     srcId: 'source-4',
@@ -311,6 +311,6 @@ export const gates: Gate[] = [
     dstId: 'destination-9',
     intent: POLICY_INTENT.ALLOW,
     label: '3rd Part Service Data Ingestion',
-    id: 'gate-6'
-  }
+    id: 'gate-6',
+  },
 ];

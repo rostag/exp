@@ -1,7 +1,15 @@
 import { Component, OnInit, HostListener, Input, AfterViewInit } from '@angular/core';
 import * as d3 from 'd3';
 import { sources, destinations, streams, gates } from './data-mocks';
-import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, ResourceGroup, Coordinates } from './data-model';
+import {
+  RESOURCE_GROUP_TYPE,
+  Gate,
+  POLICY_INTENT,
+  RenderModel,
+  Stream,
+  ResourceGroup,
+  Coordinates,
+} from './data-model';
 
 @Component({
   selector: 'app-flow-diagram',
@@ -9,7 +17,6 @@ import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, Resource
   styleUrls: ['./diagram.component.scss'],
 })
 export class FlowDiagramComponent implements OnInit, AfterViewInit {
-
   @Input() srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
   @Input() dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
 
@@ -50,7 +57,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     intent: POLICY_INTENT.ALLOW,
     srcId: '*',
     dstId: '*',
-    label: 'Default ALLOW'
+    label: 'Default ALLOW',
   };
 
   @HostListener('window:resize', ['$event'])
@@ -81,9 +88,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.chartContainer = d3.select('.chart-container');
 
     // Clean up before re-rendering
-    this.chartContainer
-      .selectAll('*')
-      .remove();
+    this.chartContainer.selectAll('*').remove();
 
     const chartContainerWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
     const chart = this.chartContainer
@@ -96,11 +101,9 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     chart.attr('width', chartWidth).attr('height', this.barHeight * this.streams.length + 500);
 
-    const streamGroup = chart
-      .append('g');
+    const streamGroup = chart.append('g');
 
-    const gateGroup = chart
-      .append('g');
+    const gateGroup = chart.append('g');
 
     this.drawGates(chart, gateGroup);
 
@@ -131,10 +134,12 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       const distGateX = gateX - startX;
       const distGateY = gateY - startY;
 
-      const control1X = gate.intent === POLICY_INTENT.ALLOW ? startX + distX / controlRatio : startX + distGateX / controlRatio;
+      const control1X =
+        gate.intent === POLICY_INTENT.ALLOW ? startX + distX / controlRatio : startX + distGateX / controlRatio;
       const control1Y = startY;
 
-      const control2X = gate.intent === POLICY_INTENT.ALLOW ? endX - distX / controlRatio : gateX - distGateX / controlRatio;
+      const control2X =
+        gate.intent === POLICY_INTENT.ALLOW ? endX - distX / controlRatio : gateX - distGateX / controlRatio;
       const control2Y = gate.intent === POLICY_INTENT.ALLOW ? endY : gateY;
 
       if (gate.intent === POLICY_INTENT.ALLOW) {
@@ -181,8 +186,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     const multiLayoutX = i => chartWidth / 2 - this.gateWidth / 8;
     const multiLayoutY = i => i * gateOuterHeight + gateMarginTop;
 
-    const layoutX = i => layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i);
-    const layoutY = i => layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i);
+    const layoutX = i => (layout === 'SINGLE' ? singleLayoutX(i) : multiLayoutX(i));
+    const layoutY = i => (layout === 'SINGLE' ? singleLayoutY(i) : multiLayoutY(i));
 
     for (let i = 0; i < gates.length; i++) {
       const gate = gates[i];
@@ -226,11 +231,13 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   private filterBySource(type: RESOURCE_GROUP_TYPE): RenderModel {
-
-    const filteredSources = this.sources.filter(source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
+    const filteredSources = this.sources.filter(
+      source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+    );
     // Take only gates which has at least one source of the given type - or DEFAULT gate
     const filteredGates = this.gates.filter(
-      gate => gate.srcId === '*' || this.getSourceById(gate.srcId).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+      gate =>
+        gate.srcId === '*' || this.getSourceById(gate.srcId).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
     );
     // Take only flow entries which has filtered sources
     const filteredStreams = this.streams.filter(
@@ -242,18 +249,16 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       sources: filteredSources,
       gates: filteredGates,
       streams: filteredStreams,
-      destinations: filteredDestinations
+      destinations: filteredDestinations,
     };
   }
 
   private getSourcesByGate(gate): ResourceGroup[] {
-    const result = this.sources.filter(src => src.id === gate.source);
-    return result;
+    return this.sources.filter(src => src.id === gate.source);
   }
 
   private getSourceById(srcId: string): ResourceGroup {
-    const result = this.sources.find(src => src.id === srcId);
-    return result;
+    return this.sources.find(src => src.id === srcId);
   }
 
   private filterByDestination(type: string): RenderModel {
@@ -265,7 +270,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       sources: filteredSources,
       gates: filteredGates,
       streams: filteredStreams,
-      destinations: filteredDestinations
+      destinations: filteredDestinations,
     };
   }
 
@@ -274,14 +279,14 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   public selectSource(src: ResourceGroup) {
-    this.selectedSource ? this.selectedSource.selected = false : null;
+    this.selectedSource ? (this.selectedSource.selected = false) : null;
     this.selectedSource = src;
     this.selectedSource.selected = true;
 
     // Select related streams
-    this.streams.forEach(stream => stream.selected = false);
+    this.streams.forEach(stream => (stream.selected = false));
     const selStreams: Stream[] = this.getStreamsBySource(src);
-    selStreams.forEach(stream => stream.selected = true);
+    selStreams.forEach(stream => (stream.selected = true));
 
     this.drawChart();
   }

@@ -1,46 +1,46 @@
 export enum POLICY_INTENT {
-    ALLOW = 'ALLOW',
-    DENY = 'DENY'
+  ALLOW = 'ALLOW',
+  DENY = 'DENY',
 }
 
 export enum RESOURCE_GROUP_TYPE {
-    USER = 'USER',
-    NODE = 'NODE',
-    SERVICE = 'SERVICE',
-    DATA = 'DATA',
-    ALL = '*'
+  USER = 'USER',
+  NODE = 'NODE',
+  SERVICE = 'SERVICE',
+  DATA = 'DATA',
+  ALL = '*',
 }
 
 export interface Stream {
-    srcId: string;
-    dstId: string;
-    label: string;
-    selected?: boolean;
-    srcVolume?: number;
-    gatedVolume?: number;
+  srcId: string;
+  dstId: string;
+  label: string;
+  selected?: boolean;
+  srcVolume?: number;
+  gatedVolume?: number;
 }
 
 export interface ResourceGroup {
-    id: string;
-    label: string;
-    type: string;
-    selected?: boolean;
+  id: string;
+  label: string;
+  type: string;
+  selected?: boolean;
 }
 
 export interface Gate {
-    srcId: string;
-    dstId: string;
-    intent: string;
-    label: string;
-    id: string;
-    selected?: boolean;
+  srcId: string;
+  dstId: string;
+  intent: string;
+  label: string;
+  id: string;
+  selected?: boolean;
 }
 
 export interface RenderModel {
-    sources: ResourceGroup[];
-    gates: Gate[];
-    streams: Stream[];
-    destinations: ResourceGroup[];
+  sources: ResourceGroup[];
+  gates: Gate[];
+  streams: Stream[];
+  destinations: ResourceGroup[];
 }
 
-export interface Coordinates extends Array<[number, number]> { }
+export type Coordinates = Array<[number, number]>;
