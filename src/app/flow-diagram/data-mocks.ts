@@ -182,7 +182,7 @@ export const streams: Stream[] = [
   {
     srcId: 'source-1',
     dstId: 'destination-4',
-    label: 'Internet Users'
+    label: 'Internet Users',
   },
   {
     srcId: 'source-3',
@@ -211,7 +211,7 @@ export const streams: Stream[] = [
   {
     srcId: 'source-5',
     dstId: 'destination-5',
-    label: 'Unknown Policy Name'
+    label: 'Unknown Policy Name',
   },
   {
     srcId: 'source-6',
