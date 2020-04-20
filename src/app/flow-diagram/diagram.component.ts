@@ -105,6 +105,12 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
       const dstEl = d3.select(`#${stream.destination}`).node() as HTMLElement;
 
+      const gate: Gate = this.getGateByStream(stream) || this.defaultGate;
+      const gateSelection = d3.select(`#${gate.id}`);
+
+      const gateX = parseFloat(gateSelection.attr('cx'));
+      const gateY = parseFloat(gateSelection.attr('cy'));
+
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
 
@@ -117,26 +123,30 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       const distX = endX - startX;
       const distY = endY - startY;
 
-      const control1X = startX + distX / controlRatio;
+      const distGateX = gateX - startX;
+      const distGateY = gateY - startY;
+
+      const control1X = gate.intent === POLICY_INTENT.ALLOW ? startX + distX / controlRatio : startX + distGateX / controlRatio;
       const control1Y = startY;
 
-      const control2X = endX - distX / controlRatio;
-      const control2Y = endY;
+      const control2X = gate.intent === POLICY_INTENT.ALLOW ? endX - distX / controlRatio : gateX - distGateX / controlRatio;
+      const control2Y = gate.intent === POLICY_INTENT.ALLOW ? endY : gateY;
 
-      const gate: Gate = this.getGateByStream(stream) || this.defaultGate;
-      const gateSelection = d3.select(`#${gate.id}`);
-
-      const gateX = parseFloat(gateSelection.attr('cx'));
-      const gateY = parseFloat(gateSelection.attr('cy'));
-
-      coords.push([startX, startY]);
-      coords.push([control1X, control1Y]);
-      coords.push([gateX, gateY]);
-      coords.push([control2X, control2Y]);
-      coords.push([endX, endY]);
+      if (gate.intent === POLICY_INTENT.ALLOW) {
+        coords.push([startX, startY]);
+        coords.push([control1X, control1Y]);
+        coords.push([gateX, gateY]);
+        coords.push([control2X, control2Y]);
+        coords.push([endX, endY]);  
+      } else {
+        coords.push([startX, startY]);
+        coords.push([control1X, control1Y]);
+        coords.push([control2X, control2Y]);
+        coords.push([gateX, gateY]);
+      }
 
       const lineGenerator = d3.line().curve(d3.curveBasis);
-      const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
+      const pathData = lineGenerator(coords);
   
       this.drawStream(coords, pathData, stream);
     });
