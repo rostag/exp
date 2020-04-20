@@ -211,9 +211,9 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
   }
 
-  public selectFlow(item) {
+  public selectStream(stream: Stream) {
     this.selectedItem.selected = false;
-    this.selectedItem = item;
+    this.selectedItem = stream;
     this.selectedItem.selected = true;
 
     this.drawChart();
