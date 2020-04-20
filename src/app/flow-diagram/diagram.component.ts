@@ -10,8 +10,8 @@ import { RESOURCE_GROUP_TYPE, Policy, POLICY_INTENT, RenderModel, FlowEntry, Res
 })
 export class FlowDiagramComponent implements OnInit {
 
-  @Input('srcType') srcType: string = RESOURCE_GROUP_TYPE.USER;
-  @Input('destinationType') dstType: string = RESOURCE_GROUP_TYPE.DATA;
+  @Input('srcType') srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
+  @Input('destinationType') dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
 
   public sources = sources;
   public destinations = destinations;
@@ -222,12 +222,13 @@ export class FlowDiagramComponent implements OnInit {
     this.drawChart();
   }
 
-  private filterBySource(type: string): RenderModel {
-    const filteredSources = this.sources.filter(source => source.type === type)
+  private filterBySource(type: RESOURCE_GROUP_TYPE): RenderModel {
+
+    const filteredSources = this.sources.filter(source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL)
     // Take only gates which has at least one source of the given type - or DEFAULT gate
-    const filteredGates = this.gates.filter(gate => gate.source === '*' || this.getSourceById(gate.source).type === type);
+    const filteredGates = this.gates.filter(gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only flow entries which has filtered sources
-    const filteredConnections = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type);
+    const filteredConnections = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only destinations which 
     const filteredDestinations = this.destinations; //.filter(flow => this.getSourcesByGate(gate).filter(src => src.type === type ) )
     return {

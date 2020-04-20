@@ -245,6 +245,11 @@ export const flowEntries: FlowEntry[] = [
     label: POLICY_INTENT.DENY,
   },
   {
+    source: 'source-14',
+    destination: 'destination-9',
+    label: POLICY_INTENT.DENY,
+  },
+  {
     source: 'source-24',
     destination: 'destination-9',
     label: 'Allow Traffic',

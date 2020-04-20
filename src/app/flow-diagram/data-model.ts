@@ -7,7 +7,8 @@ export enum POLICY_INTENT {
     USER = 'USER', 
     NODE = 'NODE',
     SERVICE = 'SERVICE',
-    DATA = 'DATA'
+    DATA = 'DATA',
+    ALL = '*'
   }
   
   export interface FlowEntry {
