@@ -11,7 +11,7 @@ export enum POLICY_INTENT {
     ALL = '*'
   }
   
-  export interface FlowEntry {
+  export interface Stream {
     source: string;
     destination: string;
     label: string;
@@ -24,7 +24,7 @@ export enum POLICY_INTENT {
     type: string;
   }
   
-  export interface Policy {
+  export interface Gate {
     source: string;
     destination: string;
     intent: string;
@@ -35,8 +35,8 @@ export enum POLICY_INTENT {
   
   export interface RenderModel {
     sources: ResourceGroup[];
-    gates: Policy[];
-    connections: FlowEntry[];
-    destinations: ResourceGroup[]
+    gates: Gate[];
+    streams: Stream[];
+    destinations: ResourceGroup[];
   }
   

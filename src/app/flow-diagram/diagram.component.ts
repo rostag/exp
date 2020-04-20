@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, Input } from '@angular/core';
 import * as d3 from 'd3';
-import { sources, destinations, flowEntries, gates } from './data-mocks';
-import { RESOURCE_GROUP_TYPE, Policy, POLICY_INTENT, RenderModel, FlowEntry, ResourceGroup } from './data-model';
+import { sources, destinations, streams, gates } from './data-mocks';
+import { RESOURCE_GROUP_TYPE, Gate, POLICY_INTENT, RenderModel, Stream, ResourceGroup } from './data-model';
 
 @Component({
   selector: 'app-flow-diagram',
@@ -15,12 +15,12 @@ export class FlowDiagramComponent implements OnInit {
 
   public sources = sources;
   public destinations = destinations;
-  public flowEntries = flowEntries;
+  public flowEntries = streams;
   public gates = gates;
 
   public rawSources = sources.concat();
   public rawDestinations = destinations.concat();
-  public rawFlowEntries = flowEntries.concat();
+  public rawFlowEntries = streams.concat();
   public rawGates = gates.concat();
 
   barHeight = 24;
@@ -45,7 +45,7 @@ export class FlowDiagramComponent implements OnInit {
 
   private chartContainer;
 
-  private defaultGate: Policy = {
+  private defaultGate: Gate = {
     id: 'default-gate',
     intent: POLICY_INTENT.ALLOW,
     source: '*',
@@ -61,7 +61,7 @@ export class FlowDiagramComponent implements OnInit {
   ngOnInit(): void {
     this.renderFilters();
 
-    this.selectedItem = flowEntries[3];
+    this.selectedItem = streams[3];
   }
 
   ngAfterViewInit(): void {
@@ -75,7 +75,7 @@ export class FlowDiagramComponent implements OnInit {
     this.sources = filteredBySource.sources.concat();
     this.destinations = filteredBySource.destinations.concat();
     this.gates = filteredBySource.gates.concat();
-    this.flowEntries = filteredBySource.connections.concat();
+    this.flowEntries = filteredBySource.streams.concat();
   }
 
   private drawChart() {
@@ -99,11 +99,11 @@ export class FlowDiagramComponent implements OnInit {
 
     this.drawGates(chart);
 
-    this.flowEntries.forEach((connection: FlowEntry) => {
+    this.flowEntries.forEach((stream: Stream) => {
       const controlRatio = 3;
       const coords = [];
-      const srcEl = d3.select(`#${connection.source}`).node() as HTMLElement;
-      const dstEl = d3.select(`#${connection.destination}`).node() as HTMLElement;
+      const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
+      const dstEl = d3.select(`#${stream.destination}`).node() as HTMLElement;
       
       const srcRect = srcEl.getBoundingClientRect();
       const dstRect = dstEl.getBoundingClientRect();
@@ -123,7 +123,7 @@ export class FlowDiagramComponent implements OnInit {
       const control2X = endX - distX / controlRatio;
       const control2Y = endY;
 
-      const gate: Policy = this.getGateByConnection(connection) || this.defaultGate;
+      const gate: Gate = this.getGateByStream(stream) || this.defaultGate;
       const gateSelection = d3.select(`#${gate.id}`);
 
       const gateX = gateSelection.attr('cx');
@@ -135,11 +135,11 @@ export class FlowDiagramComponent implements OnInit {
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawStream(coords, gate, connection);
+      this.drawStream(coords, gate, stream);
     });
   }
 
-  private drawStream(coords, gate: Policy, connection: FlowEntry) {
+  private drawStream(coords, gate: Gate, stream: Stream) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
     const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
@@ -147,8 +147,8 @@ export class FlowDiagramComponent implements OnInit {
     chart
       .append('path')
       .style('fill', 'none')
-      .style('stroke', connection.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
-      .style('opacity', connection.selected ? 1 : this.flowStrokeOpacity)
+      .style('stroke', stream.selected ? this.flowStrokeColorSelected : this.flowStrokeColor)
+      .style('opacity', stream.selected ? 1 : this.flowStrokeOpacity)
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
       .attr('d', pathData)
   }
@@ -195,8 +195,8 @@ export class FlowDiagramComponent implements OnInit {
     }
   }
 
-  public byType(collection, type) {
-    return collection.filter(item => item.type === type);
+  public byType(collection, type: RESOURCE_GROUP_TYPE) {
+    return collection.filter((item: ResourceGroup) => item.type === type);
   }
 
   public selectGate(gate) {
@@ -207,14 +207,12 @@ export class FlowDiagramComponent implements OnInit {
     return this.gates;
   }
 
-  private getGateByConnection(connection): Policy {
-    const gate: Policy = this.gates.find(gate => gate.source === connection.source && gate.destination === connection.destination);
+  private getGateByStream(stream: Stream): Gate {
+    const gate: Gate = this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
     return gate;
   }
 
   public selectFlow(item) {
-    console.log('Sel:', this.selectedItem, item);
-
     this.selectedItem.selected = false;
     this.selectedItem = item;
     this.selectedItem.selected = true;
@@ -228,13 +226,13 @@ export class FlowDiagramComponent implements OnInit {
     // Take only gates which has at least one source of the given type - or DEFAULT gate
     const filteredGates = this.gates.filter(gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only flow entries which has filtered sources
-    const filteredConnections = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
+    const filteredStreams = this.flowEntries.filter(flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only destinations which 
     const filteredDestinations = this.destinations; //.filter(flow => this.getSourcesByGate(gate).filter(src => src.type === type ) )
     return {
       sources: filteredSources,
       gates: filteredGates,
-      connections: filteredConnections,
+      streams: filteredStreams,
       destinations: filteredDestinations
     };
   }
@@ -252,12 +250,12 @@ export class FlowDiagramComponent implements OnInit {
   private filterByDestination(type: string): RenderModel {
     const filteredSources = this.sources;
     const filteredGates = this.gates;
-    const filteredConnections = this.flowEntries;
+    const filteredStreams = this.flowEntries;
     const filteredDestinations = this.destinations.filter(destination => destination.type === type);
     return {
       sources: filteredSources,
       gates: filteredGates,
-      connections: filteredConnections,
+      streams: filteredStreams,
       destinations: filteredDestinations
     };
   }

@@ -1,4 +1,4 @@
-import { ResourceGroup, FlowEntry, Policy, RESOURCE_GROUP_TYPE, POLICY_INTENT } from './data-model';
+import { ResourceGroup, FlowEntry as Stream, Policy as Gate, RESOURCE_GROUP_TYPE, POLICY_INTENT } from './data-model';
 
 export const sources: ResourceGroup[] = [
   {
@@ -171,7 +171,7 @@ export const destinations: ResourceGroup[] = [
   },
 ];
 
-export const flowEntries: FlowEntry[] = [
+export const streams: Stream[] = [
   {
     source: 'source-1',
     destination: 'destination-1',
@@ -256,7 +256,7 @@ export const flowEntries: FlowEntry[] = [
   },
 ];
 
-export const gates: Policy[] = [
+export const gates: Gate[] = [
   {
     source: 'source-1',
     destination: 'destination-1',
