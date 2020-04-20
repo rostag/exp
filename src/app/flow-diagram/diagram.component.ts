@@ -53,6 +53,8 @@ export class FlowDiagramComponent implements OnInit {
   gateFontSize = 10;
   selectedItem: any;
 
+  private chartContainer;
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.drawChart();
@@ -66,15 +68,20 @@ export class FlowDiagramComponent implements OnInit {
     this.drawChart();
   }
 
+  public policyByConnectionId(connId: string) {
+    return null
+  }
+
   private drawChart() {
+    this.chartContainer = d3.select('.chart-container');
+    
     // Clean up before re-rendering
-    d3.select('.chart-container')
+    this.chartContainer
       .selectAll('*')
       .remove();
 
-    const chartContainer = d3.select('.chart-container');
-    const chartContainerWidth = (chartContainer.node() as HTMLElement).getBoundingClientRect().width;
-    const chart = chartContainer
+    const chartContainerWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
+    const chart = this.chartContainer
       .append('svg')
       .attr('class', 'chart')
       .style('fill', '#fafafa');
@@ -117,32 +124,16 @@ export class FlowDiagramComponent implements OnInit {
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawFlowline(coords, gate);
+      this.drawStream(coords, gate);
     });
+
+    this.drawGates(chart);
   }
 
-  private drawFlowline(coords, gate) {
+  private drawStream(coords, gate) {
     const lineGenerator = d3.line().curve(d3.curveBasis);
-    const points: [number, number][] = coords;
-    const pathData = gate.intent === 'ALLOW' ? lineGenerator(points) : lineGenerator(points.slice(0, 3));
+    const pathData = gate.intent === 'ALLOW' ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
     const chart = d3.select('.chart');
-
-    // Draw rectangles
-    chart
-      .append('rect')
-      .style('fill', this.flowCapColor)
-      .attr('x', coords[0][0])
-      .attr('y', coords[0][1] - this.barHeight / 2)
-      .attr('width', this.flowCapWidth)
-      .attr('height', this.barHeight - 1);
-
-    chart
-      .append('rect')
-      .style('fill', this.flowCapColor)
-      .attr('x', coords[4][0] - this.flowCapWidth)
-      .attr('y', coords[4][1] - this.barHeight / 2)
-      .attr('width', this.flowCapWidth)
-      .attr('height', this.barHeight - 1);
 
     // Line
     chart
@@ -153,28 +144,39 @@ export class FlowDiagramComponent implements OnInit {
       .style('stroke-width', this.flowStrokeWidth + Math.floor(Math.random() * 15))
       .attr('d', pathData);
 
-    // chart
-    //   .append('circle')
-    //   .data([points[2]])
-    //   .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
-    //   .style('stroke', this.gateStrokeColor)
-    //   .attr('cx', function(d) {
-    //     return d[0];
-    //   })
-    //   .attr('cy', function(d) {
-    //     return d[1];
-    //   })
-    //   .attr('r', this.gateWidth / 2);
+    chart
+      .append('text')
+      .style('fill', this.gateLabelColor)
+      .attr('font-size', this.gateFontSize)
+      .attr('text-anchor', 'middle')
+      .attr('x', coords[2][0])
+      .attr('y', coords[2][1])
+      .attr('dy', '20px')
+      .text(gate.label);
+  }
 
-    // chart
-    //   .append('text')
-    //   .style('fill', this.gateLabelColor)
-    //   .attr('font-size', this.gateFontSize)
-    //   .attr('text-anchor', 'middle')
-    //   .attr('x', points[2][0])
-    //   .attr('y', points[2][1])
-    //   .attr('dy', '20px')
-    //   .text(gate.label);
+  public drawGates(chart) {
+    console.log('Gates:', this.gates);
+
+    const gateMarginTop = 100;
+    const gateOuterHeight = 50;
+    const chartWidth = (this.chartContainer.node() as HTMLElement).getBoundingClientRect().width;
+
+    for (let i = 0; i < gates.length; i++) {
+      const gate = gates[i];
+      chart
+        .append('circle')
+        .data([gate])
+        .style('fill', gate.intent === 'ALLOW' ? this.gateAllowFillColor : this.gateDenyFillColor)
+        .style('stroke', this.gateStrokeColor)
+        .attr('cx', d => {
+          return chartWidth / 2 - this.gateWidth / 4;
+        })
+        .attr('cy', d => {
+          return i * gateOuterHeight + gateMarginTop;
+        })
+        .attr('r', this.gateWidth / 2);
+    }
   }
 
   public byType(collection, type) {
