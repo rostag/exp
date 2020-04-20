@@ -12,8 +12,8 @@ export enum RESOURCE_GROUP_TYPE {
 }
 
 export interface Stream {
-    source: string;
-    destination: string;
+    srcId: string;
+    dstId: string;
     label: string;
     selected?: boolean;
 }
@@ -26,8 +26,8 @@ export interface ResourceGroup {
 }
 
 export interface Gate {
-    source: string;
-    destination: string;
+    srcId: string;
+    dstId: string;
     intent: string;
     label: string;
     id: string;

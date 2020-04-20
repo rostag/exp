@@ -48,8 +48,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   private defaultGate: Gate = {
     id: 'default-gate',
     intent: POLICY_INTENT.ALLOW,
-    source: '*',
-    destination: '*',
+    srcId: '*',
+    dstId: '*',
     label: 'Default ALLOW'
   };
 
@@ -107,8 +107,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.streams.forEach((stream: Stream) => {
       const controlRatio = 3;
       const coords: Coordinates = [];
-      const srcEl = d3.select(`#${stream.source}`).node() as HTMLElement;
-      const dstEl = d3.select(`#${stream.destination}`).node() as HTMLElement;
+      const srcEl = d3.select(`#${stream.srcId}`).node() as HTMLElement;
+      const dstEl = d3.select(`#${stream.dstId}`).node() as HTMLElement;
 
       const gate: Gate = this.getGateByStream(stream) || this.defaultGate;
       const gateSelection = d3.select(`#${gate.id}`);
@@ -222,7 +222,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   private getGateByStream(stream: Stream): Gate {
-    return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
+    return this.gates.find(gate => gate.srcId === stream.srcId && gate.dstId === stream.dstId);
   }
 
   private filterBySource(type: RESOURCE_GROUP_TYPE): RenderModel {
@@ -230,11 +230,11 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     const filteredSources = this.sources.filter(source => source.type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL);
     // Take only gates which has at least one source of the given type - or DEFAULT gate
     const filteredGates = this.gates.filter(
-      gate => gate.source === '*' || this.getSourceById(gate.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+      gate => gate.srcId === '*' || this.getSourceById(gate.srcId).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
     );
     // Take only flow entries which has filtered sources
     const filteredStreams = this.streams.filter(
-      flow => this.getSourceById(flow.source).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
+      flow => this.getSourceById(flow.srcId).type === type || this.srcType === RESOURCE_GROUP_TYPE.ALL
     );
     // Take only destinations which
     const filteredDestinations = this.destinations;
@@ -287,6 +287,6 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   private getStreamsBySource(src: ResourceGroup): Stream[] {
-    return this.streams.filter(stream => stream.source === src.id);
+    return this.streams.filter(stream => stream.srcId === src.id);
   }
 }

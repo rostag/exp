@@ -173,126 +173,126 @@ export const destinations: ResourceGroup[] = [
 
 export const streams: Stream[] = [
   {
-    source: 'source-1',
-    destination: 'destination-1',
+    srcId: 'source-1',
+    dstId: 'destination-1',
     label: 'Internet Users',
   },
   {
-    source: 'source-3',
-    destination: 'destination-1',
+    srcId: 'source-3',
+    dstId: 'destination-1',
     label: 'Data Compliance Policy',
   },
   {
-    source: 'source-4',
-    destination: 'destination-2',
+    srcId: 'source-4',
+    dstId: 'destination-2',
     label: 'User-Data Requests'
   },
   {
-    source: 'source-4',
-    destination: 'destination-5',
+    srcId: 'source-4',
+    dstId: 'destination-5',
     label: 'User-Data Requests'
   },
   {
-    source: 'source-5',
-    destination: 'destination-9',
+    srcId: 'source-5',
+    dstId: 'destination-9',
     label: 'Unknown Policy Name',
   },
   {
-    source: 'source-6',
-    destination: 'destination-9',
+    srcId: 'source-6',
+    dstId: 'destination-9',
     label: '3rd Part Service Data Ingestion',
   },
   {
-    source: 'source-1',
-    destination: 'destination-8',
+    srcId: 'source-1',
+    dstId: 'destination-8',
     label: 'Test Policy 3',
   },
   {
-    source: 'source-3',
-    destination: 'destination-7',
+    srcId: 'source-3',
+    dstId: 'destination-7',
     label: 'VIP Data',
   },
   {
-    source: 'source-4',
-    destination: 'destination-9',
+    srcId: 'source-4',
+    dstId: 'destination-9',
     label: 'Privileged',
   },
   {
-    source: 'source-1',
-    destination: 'destination-8',
+    srcId: 'source-1',
+    dstId: 'destination-8',
     label: POLICY_INTENT.DENY,
   },
   {
-    source: 'source-11',
-    destination: 'destination-9',
+    srcId: 'source-11',
+    dstId: 'destination-9',
     label: 'Allow incoming',
   },
   {
-    source: 'source-12',
-    destination: 'destination-9',
+    srcId: 'source-12',
+    dstId: 'destination-9',
     label: POLICY_INTENT.DENY,
   },
   {
-    source: 'source-18',
-    destination: 'destination-9',
+    srcId: 'source-18',
+    dstId: 'destination-9',
     label: 'Frankfurt Allowed',
   },
   {
-    source: 'source-21',
-    destination: 'destination-9',
+    srcId: 'source-21',
+    dstId: 'destination-9',
     label: POLICY_INTENT.DENY,
   },
   {
-    source: 'source-14',
-    destination: 'destination-9',
+    srcId: 'source-14',
+    dstId: 'destination-9',
     label: POLICY_INTENT.DENY,
   },
   {
-    source: 'source-24',
-    destination: 'destination-9',
+    srcId: 'source-24',
+    dstId: 'destination-9',
     label: 'Allow Traffic',
   },
 ];
 
 export const gates: Gate[] = [
   {
-    source: 'source-1',
-    destination: 'destination-1',
+    srcId: 'source-1',
+    dstId: 'destination-1',
     intent: POLICY_INTENT.DENY,
     label: 'Internet Users',
     id: 'gate-1'
   },
   {
-    source: 'source-3',
-    destination: 'destination-1',
+    srcId: 'source-3',
+    dstId: 'destination-1',
     intent: POLICY_INTENT.DENY,
     label: 'Data Compliance Policy',
     id: 'gate-2'
   },
   {
-    source: 'source-4',
-    destination: 'destination-2',
+    srcId: 'source-4',
+    dstId: 'destination-2',
     intent: POLICY_INTENT.ALLOW,
     label: 'User-Data Requests',
     id: 'gate-3'
   },
   {
-    source: 'source-4',
-    destination: 'destination-5',
+    srcId: 'source-4',
+    dstId: 'destination-5',
     intent: POLICY_INTENT.ALLOW,
     label: 'User-Data Requests',
     id: 'gate-4',
   },
   {
-    source: 'source-5',
-    destination: 'destination-9',
+    srcId: 'source-5',
+    dstId: 'destination-9',
     intent: POLICY_INTENT.DENY,
     label: 'Unknown Policy Name',
     id: 'gate-5',
   },
   {
-    source: 'source-6',
-    destination: 'destination-9',
+    srcId: 'source-6',
+    dstId: 'destination-9',
     intent: POLICY_INTENT.ALLOW,
     label: '3rd Part Service Data Ingestion',
     id: 'gate-6'
