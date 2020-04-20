@@ -60,12 +60,11 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.renderFilters();
-
-    this.selectedSource = this.sources[1];
   }
 
   ngAfterViewInit(): void {
     this.drawChart();
+    this.selectSource(this.sources[1]);
   }
 
   private renderFilters() {
@@ -210,7 +209,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public byType(collection: ResourceGroup[], type: RESOURCE_GROUP_TYPE): ResourceGroup[] {
+  public byType(collection: ResourceGroup[], type: string): ResourceGroup[] {
     return collection.filter((item: ResourceGroup) => item.type === type);
   }
 
@@ -224,14 +223,6 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   private getGateByStream(stream: Stream): Gate {
     return this.gates.find(gate => gate.source === stream.source && gate.destination === stream.destination);
-  }
-
-  public selectSource(src: ResourceGroup) {
-    this.selectedSource.selected = false;
-    this.selectedSource = src;
-    this.selectedSource.selected = true;
-
-    this.drawChart();
   }
 
   private filterBySource(type: RESOURCE_GROUP_TYPE): RenderModel {
@@ -280,5 +271,22 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   private filterByGate(type: string): ResourceGroup[] {
     return null;
+  }
+
+  public selectSource(src: ResourceGroup) {
+    this.selectedSource ? this.selectedSource.selected = false : null;
+    this.selectedSource = src;
+    this.selectedSource.selected = true;
+
+    // Select related streams
+    this.flowEntries.forEach(stream => stream.selected = false);
+    const selStreams: Stream[] = this.getStreamsBySource(src);
+    selStreams.forEach(stream => stream.selected = true);
+
+    this.drawChart();
+  }
+
+  private getStreamsBySource(src: ResourceGroup): Stream[] {
+    return this.flowEntries.filter(stream => stream.source === src.id);
   }
 }

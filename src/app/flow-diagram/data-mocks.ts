@@ -185,14 +185,12 @@ export const streams: Stream[] = [
   {
     source: 'source-4',
     destination: 'destination-2',
-    label: 'User-Data Requests',
-    selected: true,
+    label: 'User-Data Requests'
   },
   {
     source: 'source-4',
     destination: 'destination-5',
-    label: 'User-Data Requests',
-    selected: true,
+    label: 'User-Data Requests'
   },
   {
     source: 'source-5',
@@ -276,8 +274,7 @@ export const gates: Gate[] = [
     destination: 'destination-2',
     intent: POLICY_INTENT.ALLOW,
     label: 'User-Data Requests',
-    id: 'gate-3',
-    selected: true,
+    id: 'gate-3'
   },
   {
     source: 'source-4',
