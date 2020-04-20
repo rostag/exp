@@ -135,13 +135,14 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       coords.push([control2X, control2Y]);
       coords.push([endX, endY]);
 
-      this.drawStream(coords, gate, stream);
+      const lineGenerator = d3.line().curve(d3.curveBasis);
+      const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
+  
+      this.drawStream(coords, pathData, stream);
     });
   }
 
-  private drawStream(coords: Coordinates, gate: Gate, stream: Stream) {
-    const lineGenerator = d3.line().curve(d3.curveBasis);
-    const pathData = gate.intent === POLICY_INTENT.ALLOW ? lineGenerator(coords) : lineGenerator(coords.slice(0, 3));
+  private drawStream(coords: Coordinates, pathData: any, stream: Stream) {
     const chart = d3.select('.chart');
 
     chart
@@ -195,15 +196,15 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public byType(collection, type: RESOURCE_GROUP_TYPE) {
+  public byType(collection: ResourceGroup[], type: RESOURCE_GROUP_TYPE): ResourceGroup[] {
     return collection.filter((item: ResourceGroup) => item.type === type);
   }
 
-  public selectGate(gate) {
+  public selectGate(gate: Gate) {
     console.log('Select gate:', gate);
   }
 
-  public getGates() {
+  public getGates(): Gate[] {
     return this.gates;
   }
 
