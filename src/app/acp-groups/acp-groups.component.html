@@ -5,13 +5,13 @@
 <div
   *ngFor="let src of collection"
   [ngClass]="{ 'list-item': true, expanded: src.expanded, selected: src.selected }"
-  (mouseover)="selectSource(src)"
-  (click)="setSource(src)"
+  (mouseover)="selectItem(src)"
+  (click)="setItem(src)"
   [title]="src.id"
   [id]="src.id"
 >
   <div class="item-header">
-    <div class="expander" (click)="expandSource(src)">
+    <div class="expander" (click)="expandItem(src)">
       <clr-icon
         shape="caret"
         style="transform: rotate(90deg);"

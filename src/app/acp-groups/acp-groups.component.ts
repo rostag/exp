@@ -16,15 +16,15 @@ export class AcpPostureGroupsComponent implements OnInit {
 
   ngOnInit() {}
 
-  public selectSource(src: ResourceGroup) {
+  public selectItem(src: ResourceGroup) {
     this.itemSelected.emit(src);
   }
 
-  public setSource(src: ResourceGroup) {
+  public setItem(src: ResourceGroup) {
     this.itemSet.emit(src);
   }
 
-  public expandSource(src: ResourceGroup) {
+  public expandItem(src: ResourceGroup) {
     src.expanded = !src.expanded;
   }
 }

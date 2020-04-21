@@ -87,10 +87,10 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.drawChart();
   }
 
-  public selectDestination(src: ResourceGroup) {
+  public selectDestination(destination: ResourceGroup) {
     // Select related streams
     this.streams.forEach(stream => (stream.selected = false));
-    // this.getStreamsByDestination(src).forEach(stream => (stream.selected = true));
+    this.getStreamsByDestination(destination).forEach(stream => (stream.selected = true));
     this.drawChart();
   }
 
@@ -287,5 +287,9 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
   private getStreamsBySource(src: ResourceGroup): Stream[] {
     return this.streams.filter(stream => stream.srcId === src.id);
+  }
+
+  private getStreamsByDestination(dst: ResourceGroup): Stream[] {
+    return this.streams.filter(stream => stream.dstId === dst.id);
   }
 }
