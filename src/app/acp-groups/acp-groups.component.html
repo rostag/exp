@@ -1,6 +1,6 @@
 <div class="section-title">
-  <clr-icon [shape]="icon" class="user-icon"></clr-icon>
-  {{title}} <span>{{collection?.length}}</span>
+  <clr-icon [attr.shape]="icon" class="user-icon"></clr-icon>
+  {{ title }} <span>{{ collection?.length }}</span>
 </div>
 <div
   *ngFor="let src of collection"
@@ -12,8 +12,20 @@
 >
   <div class="item-header">
     <div class="expander" (click)="expandSource(src)">
-      <clr-icon shape="caret" style="transform: rotate(90deg);" *ngIf="!src.expanded"></clr-icon>
-      <clr-icon shape="caret" style="transform: rotate(180deg);" *ngIf="src.expanded"></clr-icon>
+      <clr-icon
+        shape="caret"
+        style="transform: rotate(90deg);"
+        *ngIf="!src.expanded"
+        title="Expand item"
+        size="16"
+      ></clr-icon>
+      <clr-icon
+        shape="caret"
+        style="transform: rotate(180deg);"
+        *ngIf="src.expanded"
+        title="Collapse item"
+        size="16"
+      ></clr-icon>
     </div>
 
     <div class="text">{{ src.label }}</div>
@@ -28,9 +40,9 @@
     </div>
   </div>
   <div class="contents">
-    <h3>Group details</h3>
-    <p>ID: {{ src.id }}</p>
-    <p>Type: {{ src.type }}</p>
-    <p>Items count: {{ src.items?.length || 0 }}</p>
+    <h5>Group details</h5>
+    <div>ID: {{ src.id }}</div>
+    <div>Type: {{ src.type }}</div>
+    <div>Items count: {{ src.items?.length || 0 }}</div>
   </div>
 </div>

@@ -7,97 +7,8 @@
     .diagram {
       display: flex;
 
-      .section-title {
-        margin-top: -2px;
-        font-size: 12px;
-        line-height: 18px;
-        color: #ffffff;
-
-        span {
-          opacity: 0.7;
-          margin-left: 12px;
-          font-size: 10px;
-          font-weight: bold;
-        }
-      }
-
-      .list-item {
-        border: 2px solid transparent;
-        background-color: rgba(0, 0, 0, 0.19);
-        padding: 0 6px 0 4px;
-        margin-bottom: 2px;
-        font-size: 11px;
-
-        .item-header {
-          display: flex;
-          justify-content: space-between;
-
-          .expander {
-            flex: 1 1 12px;
-          }
-
-          .text {
-            flex: 5 5 500px;
-            white-space: nowrap;
-          }
-
-          .meta {
-            flex: 1 1 100px;
-            height: 22px;
-            padding-top: 2px;
-
-            svg {
-              width: 100px;
-              height: 10px;
-
-              circle {
-                fill: #62a420;
-              }
-            }
-          }
-        }
-
-        .contents {
-          display: none;
-        }
-      }
-
-      .list-item.expanded {
-        .contents {
-          display: block;
-          margin-top: 4px;
-          padding: 4px 2px 3px 12px;
-          border-top: 1px solid #777;
-        }
-      }
-
-      .list-item:hover:after {
-        position: absolute;
-        content: '\2192  ';
-        left: 0;
-        font-size: 11px;
-        line-height: 1.5;
-      }
-
       .sources {
         flex: 1;
-
-        > div {
-          color: #eee;
-        }
-        .list-item {
-          border: 0px solid transparent;
-          border-right: 6px solid rgba(255, 255, 255, 0.31);
-        }
-
-        .list-item:hover,
-        .list-item.selected {
-          border: 2px solid #62a420 !important;
-          padding: 0px 2px 0px 2px;
-          margin-top: -2px;
-          margin-bottom: 0;
-          cursor: pointer;
-        }
       }
 
       .chart-container {
@@ -107,17 +18,6 @@
 
       .destinations {
         flex: 1;
-
-        > div {
-          color: #eee;
-        }
-
-        .list-item {
-          padding-top: 12px;
-          padding-bottom: 13px;
-          border: 0px solid transparent;
-          border-left: 6px solid rgba(255, 255, 255, 0.31);
-        }
       }
     }
   }

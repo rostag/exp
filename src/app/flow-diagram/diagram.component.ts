@@ -17,7 +17,19 @@ import {
   styleUrls: ['./diagram.component.scss'],
 })
 export class FlowDiagramComponent implements OnInit, AfterViewInit {
-  @Input() srcType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.ALL;
+  @Input() set srcType(type: RESOURCE_GROUP_TYPE) {
+    this.settings.srcType = type;
+    this.renderFilters();
+  }
+  get srcType(): RESOURCE_GROUP_TYPE {
+    return this.settings.srcType as RESOURCE_GROUP_TYPE;
+  }
+
+  private settings = {
+    srcType: RESOURCE_GROUP_TYPE.ALL,
+    dstType: RESOURCE_GROUP_TYPE.ALL,
+  };
+
   @Input() dstType: RESOURCE_GROUP_TYPE = RESOURCE_GROUP_TYPE.DATA;
 
   public cnf = config;
@@ -26,8 +38,15 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   public streams = streams;
   public gates = gates;
 
+  private rawSources = sources;
+  private rawDestinations = destinations;
+  private rawStreams = streams;
+  private rawGates = gates;
+
   private defaultGate = defaultGate;
   private selectedSource: ResourceGroup;
+  private selectedDestination: ResourceGroup;
+  private selectedGate: Gate;
   private chartContainer;
 
   @HostListener('window:resize', ['$event'])
@@ -44,8 +63,53 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     this.selectSource(this.sources[1]);
   }
 
+  public byType(collection: ResourceGroup[], type: string): ResourceGroup[] {
+    return collection.filter((item: ResourceGroup) => item.type === type);
+  }
+
+  public selectGate(gate: Gate) {
+    this.selectedGate = gate;
+  }
+
+  public selectSource(src: ResourceGroup) {
+    // Select related streams
+    this.streams.forEach(stream => (stream.selected = false));
+    this.getStreamsBySource(src).forEach(stream => (stream.selected = true));
+    this.drawChart();
+  }
+
+  public setSource(src: ResourceGroup) {
+    if (this.selectedSource) {
+      this.selectedSource.selected = false;
+    }
+    this.selectedSource = src;
+    this.selectedSource.selected = true;
+    this.drawChart();
+  }
+
+  public selectDestination(src: ResourceGroup) {
+    // Select related streams
+    this.streams.forEach(stream => (stream.selected = false));
+    // this.getStreamsByDestination(src).forEach(stream => (stream.selected = true));
+    this.drawChart();
+  }
+
+  public setDestination(src: ResourceGroup) {
+    if (this.selectedDestination) {
+      this.selectedDestination.selected = false;
+    }
+    this.selectedDestination = src;
+    this.selectedDestination.selected = true;
+    this.drawChart();
+  }
+
   private renderFilters() {
     this.gates.push(this.defaultGate);
+
+    this.sources = this.rawSources.concat();
+    this.destinations = this.rawDestinations.concat();
+    this.gates = this.rawGates.concat();
+    this.streams = this.rawStreams.concat();
 
     const filteredBySource: RenderModel = this.filterBySource(this.srcType);
     this.sources = filteredBySource.sources.concat();
@@ -141,7 +205,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       .attr('d', pathData);
   }
 
-  public drawGates(chart, gateGroup) {
+  private drawGates(chart, gateGroup) {
     const gateMarginTop = 100;
     const gateOuterHeight = 50;
     const gateLabelOffset = 10;
@@ -186,18 +250,6 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public byType(collection: ResourceGroup[], type: string): ResourceGroup[] {
-    return collection.filter((item: ResourceGroup) => item.type === type);
-  }
-
-  public selectGate(gate: Gate) {
-    console.log('Select gate:', gate);
-  }
-
-  public getGates(): Gate[] {
-    return this.gates;
-  }
-
   private getGateByStream(stream: Stream): Gate {
     return this.gates.find(gate => gate.srcId === stream.srcId && gate.dstId === stream.dstId);
   }
@@ -233,27 +285,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     return null;
   }
 
-  public selectSource(src: ResourceGroup) {
-    // Select related streams
-    this.streams.forEach(stream => (stream.selected = false));
-    this.getStreamsBySource(src).forEach(stream => (stream.selected = true));
-    this.drawChart();
-  }
-
-  public setSource(src: ResourceGroup) {
-    if (this.selectedSource) {
-      this.selectedSource.selected = false;
-    }
-    this.selectedSource = src;
-    this.selectedSource.selected = true;
-    this.drawChart();
-  }
-
   private getStreamsBySource(src: ResourceGroup): Stream[] {
     return this.streams.filter(stream => stream.srcId === src.id);
-  }
-
-  public expandSource(src: ResourceGroup) {
-    src.expanded = !src.expanded;
   }
 }

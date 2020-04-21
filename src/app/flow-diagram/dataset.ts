@@ -29,7 +29,7 @@ export const sources: ResourceGroup[] = [
     label: 'Users_Germany',
     id: 'source-5',
     type: RESOURCE_GROUP_TYPE.USER,
-    items: []
+    items: [],
   },
   {
     label: 'Beta Customers',
@@ -173,6 +173,33 @@ export const destinations: ResourceGroup[] = [
     label: 'EU Data',
     id: 'destination-9',
     type: RESOURCE_GROUP_TYPE.DATA,
+  },
+
+
+  {
+    label: 'Service Critical',
+    id: 'destination-10',
+    type: RESOURCE_GROUP_TYPE.SERVICE,
+  },
+  {
+    label: 'HIRD Gateway',
+    id: 'destination-11',
+    type: RESOURCE_GROUP_TYPE.SERVICE,
+  },
+  {
+    label: 'High Responsiveness API',
+    id: 'destination-12',
+    type: RESOURCE_GROUP_TYPE.SERVICE,
+  },
+  {
+    label: 'EU-based APIs',
+    id: 'destination-13',
+    type: RESOURCE_GROUP_TYPE.SERVICE,
+  },
+  {
+    label: 'Other Services',
+    id: 'destination-14',
+    type: RESOURCE_GROUP_TYPE.SERVICE,
   },
 ];
 

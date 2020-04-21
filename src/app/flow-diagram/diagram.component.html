@@ -7,23 +7,23 @@
         [collection]="byType(sources, 'USER')"
         (itemSelected)="selectSource($event)"
         (itemSet)="setSource($event)"
-        >
+      >
       </app-acp-groups>
       <app-acp-groups
         [icon]="'applications'"
         [title]="'Service Groups'"
         [collection]="byType(sources, 'SERVICE')"
         (itemSelected)="selectSource($event)"
-        (itemSet)="setSource($event)">
-        >
+        (itemSet)="setSource($event)"
+      >
       </app-acp-groups>
       <app-acp-groups
         [icon]="'rack-server'"
         [title]="'Node Groups'"
         [collection]="byType(sources, 'NODE')"
         (itemSelected)="selectSource($event)"
-        (itemSet)="setSource($event)">
-        >
+        (itemSet)="setSource($event)"
+      >
       </app-acp-groups>
     </div>
 
@@ -32,18 +32,22 @@
     </div>
 
     <div class="destinations">
-      <div class="section-title">
-        <clr-icon shape="data-cluster"></clr-icon>
-        Data Groups <span>9</span>
-      </div>
-      <div
-        *ngFor="let destination of byType(destinations, 'DATA')"
-        [id]="destination.id"
-        class="list-item"
-        title="{{ destination.id }}"
+      <app-acp-groups
+        [icon]="'data-cluster'"
+        [title]="'Data Groups'"
+        [collection]="byType(destinations, 'DATA')"
+        (itemSelected)="selectDestination($event)"
+        (itemSet)="setDestination($event)"
       >
-        {{ destination.label }}
-      </div>
+      </app-acp-groups>
+      <app-acp-groups
+        [icon]="'application'"
+        [title]="'Service Groups'"
+        [collection]="byType(destinations, 'SERVICE')"
+        (itemSelected)="selectDestination($event)"
+        (itemSet)="setDestination($event)"
+      >
+      </app-acp-groups>
     </div>
   </div>
 </div>

@@ -6,8 +6,7 @@ import { ResourceGroup } from '../flow-diagram/data-model';
   templateUrl: './acp-groups.component.html',
   styleUrls: ['./acp-groups.component.scss'],
 })
-export class GroupsComponent implements OnInit {
-
+export class AcpPostureGroupsComponent implements OnInit {
   @Input() icon: string;
   @Input() title: string;
   @Input() collection;
@@ -15,8 +14,7 @@ export class GroupsComponent implements OnInit {
   @Output() itemSelected = new EventEmitter<any>();
   @Output() itemSet = new EventEmitter<any>();
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   public selectSource(src: ResourceGroup) {
     this.itemSelected.emit(src);
