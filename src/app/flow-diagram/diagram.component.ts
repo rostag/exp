@@ -142,6 +142,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     this.streams.forEach((stream: Stream) => {
       const controlRatio = 3;
+      const gateControlRatio = 9;
       const coords: Coordinates = [];
       const srcEl = d3.select(`#${stream.srcId}`).node() as HTMLElement;
       const dstEl = d3.select(`#${stream.dstId}`).node() as HTMLElement;
@@ -178,7 +179,9 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       if (gate.intent === POLICY_INTENT.ALLOW) {
         coords.push([startX, startY]);
         coords.push([control1X, control1Y]);
+        coords.push([gateX - distX / gateControlRatio, gateY]);
         coords.push([gateX, gateY]);
+        coords.push([gateX + distX / gateControlRatio, gateY]);
         coords.push([control2X, control2Y]);
         coords.push([endX, endY]);
       } else {
