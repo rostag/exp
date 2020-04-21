@@ -1,65 +1,30 @@
 <div class="diagram-container">
   <div class="diagram">
     <div class="sources">
-      <div class="section-title">
-        <clr-icon shape="users" class="user-icon"></clr-icon>
-        User Groups <span>13</span>
-      </div>
-      <div
-        *ngFor="let src of byType(sources, 'USER')"
-        [ngClass]="{ 'list-item': true, expanded: src.expanded, selected: src.selected }"
-        (mouseover)="selectSource(src)"
-        (click)="setSource(src)"
-        [title]="src.id"
-        [id]="src.id"
-      >
-        <div class="item-header">
-          <div class="expander" (click)="expandSource(src)">
-            <clr-icon shape="caret" style="transform: rotate(90deg);" *ngIf="!src.expanded"></clr-icon>
-            <clr-icon shape="caret" style="transform: rotate(180deg);" *ngIf="src.expanded"></clr-icon>
-          </div>
-
-          <div class="text">{{ src.label }}</div>
-
-          <div class="meta">
-            <svg viewBox="0 0 10 10">
-              <circle cx="5" cy="5" r="5" />
-              <circle cx="20" cy="5" r="5" />
-              <circle cx="35" cy="5" r="5" />
-              <circle cx="50" cy="5" r="5" />
-            </svg>
-          </div>
-        </div>
-        <div class="contents">Group ID: {{ src.id }}</div>
-      </div>
-      <div class="section-title">
-        <clr-icon shape="applications" class="user-icon"></clr-icon>
-        Service Groups <span>4</span>
-      </div>
-      <div
-        *ngFor="let src of byType(sources, 'SERVICE')"
-        [id]="src.id"
-        class="list-item"
-        (mouseover)="selectSource(src)"
-        (click)="selectSource(src)"
-        title="{{ src.id }}"
-      >
-        {{ src.label }}
-      </div>
-      <div class="section-title">
-        <clr-icon shape="rack-server" class="user-icon"></clr-icon>
-        Node Groups <span>6</span>
-      </div>
-      <div
-        *ngFor="let src of byType(sources, 'NODE')"
-        [id]="src.id"
-        class="list-item"
-        (mouseover)="selectSource(src)"
-        (click)="selectSource(src)"
-        title="{{ src.id }}"
-      >
-        {{ src.label }}
-      </div>
+      <app-groups
+        [icon]="'users'"
+        [title]="'User Groups'"
+        [collection]="byType(sources, 'USER')"
+        (itemSelected)="selectSource($event)"
+        (itemSet)="setSource($event)"
+        >
+      </app-groups>
+      <app-groups
+        [icon]="'applications'"
+        [title]="'Service Groups'"
+        [collection]="byType(sources, 'SERVICE')"
+        (itemSelected)="selectSource($event)"
+        (itemSet)="setSource($event)">
+        >
+      </app-groups>
+      <app-groups
+        [icon]="'rack-server'"
+        [title]="'Node Groups'"
+        [collection]="byType(sources, 'NODE')"
+        (itemSelected)="selectSource($event)"
+        (itemSet)="setSource($event)">
+        >
+      </app-groups>
     </div>
 
     <div class="chart-container">

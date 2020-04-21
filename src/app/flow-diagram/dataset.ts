@@ -5,26 +5,31 @@ export const sources: ResourceGroup[] = [
     label: 'All External Users',
     id: 'source-1',
     type: RESOURCE_GROUP_TYPE.USER,
+    items: [1, 2, 3, 4],
   },
   {
     label: 'VIP Internal',
     id: 'source-2',
     type: RESOURCE_GROUP_TYPE.USER,
+    items: [5, 6, 7, 8, 9],
   },
   {
     label: 'US_Users',
     id: 'source-3',
     type: RESOURCE_GROUP_TYPE.USER,
+    items: [10, 11, 12],
   },
   {
     label: 'Europe Users',
     id: 'source-4',
     type: RESOURCE_GROUP_TYPE.USER,
+    items: [13, 14],
   },
   {
     label: 'Users_Germany',
     id: 'source-5',
     type: RESOURCE_GROUP_TYPE.USER,
+    items: []
   },
   {
     label: 'Beta Customers',
@@ -394,9 +399,6 @@ export const gates: Gate[] = [
 ];
 
 export const config = {
-  bar: {
-    height: 24
-  },
   stream: {
     flowStrokeColor: 'rgba(255, 255, 255, 0.08)',
     flowStrokeOpacity: 1,
@@ -411,8 +413,8 @@ export const config = {
     gateWidth: 23,
     gateHeight: 23,
     gateLabelColor: '#ddd',
-    gateFontSize: 10
-  }
+    gateFontSize: 10,
+  },
 };
 
 export const defaultGate: Gate = {
@@ -421,4 +423,4 @@ export const defaultGate: Gate = {
   srcId: '*',
   dstId: '*',
   label: 'Default ALLOW',
-}
+};

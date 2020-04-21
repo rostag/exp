@@ -25,7 +25,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   public destinations = destinations;
   public streams = streams;
   public gates = gates;
-  
+
   private defaultGate = defaultGate;
   private selectedSource: ResourceGroup;
   private chartContainer;
@@ -57,11 +57,11 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   private drawChart() {
     this.chartContainer = d3.select('.chart-container');
     this.chartContainer.selectAll('*').remove();
-    
+
     const chartContainerRect = (this.chartContainer.node() as HTMLElement).getBoundingClientRect();
     const chartWidth = chartContainerRect.width;
     const chartHeight = chartContainerRect.height;
-    
+
     const chart = this.chartContainer
       .append('svg')
       .attr('width', chartWidth)
@@ -71,7 +71,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
 
     const streamGroup = chart.append('g');
     const gateGroup = chart.append('g');
-      
+
     const chartRect = (chart.node() as any).getBoundingClientRect();
 
     this.drawGates(chart, gateGroup);
@@ -163,7 +163,10 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
       gateGroup
         .append('circle')
         .data([gate])
-        .style('fill', gate.intent === POLICY_INTENT.ALLOW ? this.cnf.gate.gateAllowFillColor : this.cnf.gate.gateDenyFillColor)
+        .style(
+          'fill',
+          gate.intent === POLICY_INTENT.ALLOW ? this.cnf.gate.gateAllowFillColor : this.cnf.gate.gateDenyFillColor
+        )
         .style('stroke', this.cnf.gate.gateStrokeColor)
         .attr('cx', layoutX(i))
         .attr('cy', layoutY(i))
@@ -255,7 +258,7 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
   }
 
   public setSource(src: ResourceGroup) {
-    this.selectedSource ? this.selectedSource.selected = false : null;
+    this.selectedSource ? (this.selectedSource.selected = false) : null;
     this.selectedSource = src;
     this.selectedSource.selected = true;
     this.drawChart();
