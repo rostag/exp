@@ -225,25 +225,8 @@ export class FlowDiagramComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private getSourcesByGate(gate): ResourceGroup[] {
-    return this.sources.filter(src => src.id === gate.source);
-  }
-
   private getSourceById(srcId: string): ResourceGroup {
     return this.sources.find(src => src.id === srcId);
-  }
-
-  private filterByDestination(type: string): RenderModel {
-    const filteredSources = this.sources;
-    const filteredGates = this.gates;
-    const filteredStreams = this.streams;
-    const filteredDestinations = this.destinations.filter(destination => destination.type === type);
-    return {
-      sources: filteredSources,
-      gates: filteredGates,
-      streams: filteredStreams,
-      destinations: filteredDestinations,
-    };
   }
 
   private filterByGate(type: string): ResourceGroup[] {

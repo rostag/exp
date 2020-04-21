@@ -2,9 +2,9 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ResourceGroup } from '../flow-diagram/data-model';
 
 @Component({
-  selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.scss'],
+  selector: 'app-acp-groups',
+  templateUrl: './acp-groups.component.html',
+  styleUrls: ['./acp-groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
 
