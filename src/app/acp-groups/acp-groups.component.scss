@@ -94,6 +94,10 @@
       margin-bottom: 0;
       cursor: pointer;
     }
+
+    .list-item:last-child:hover {
+      margin-bottom: -4px !important;
+    }
   }
 
   :host-context(.destinations) {
@@ -108,6 +112,19 @@
       padding-bottom: 13px;
       border: 0px solid transparent;
       border-left: 6px solid rgba(255, 255, 255, 0.31);
+    }
+
+    .list-item:hover,
+    .list-item.selected {
+      border: 2px solid #62a420 !important;
+      padding: 12px 2px 13px 2px;
+      margin-top: -2px;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
+    .list-item:last-child:hover {
+      padding-bottom: 11px !important;
     }
   }
 }
