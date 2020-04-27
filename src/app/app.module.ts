@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FlowDiagramComponent } from './flow-diagram/diagram.component';
 import { AcpPostureGroupsComponent } from './acp-groups/acp-groups.component';
+import { CompasComponent } from './compas/compas.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FlowDiagramComponent,
-    AcpPostureGroupsComponent
+    AcpPostureGroupsComponent,
+    CompasComponent,
   ],
   imports: [
     BrowserModule,
