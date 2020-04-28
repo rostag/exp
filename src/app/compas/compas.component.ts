@@ -28,7 +28,6 @@ export class CompasComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         setInterval(() => { this.redraw() }, 10);
-        this.redraw();
     }
 
     private tick = 0;
@@ -36,9 +35,10 @@ export class CompasComponent implements OnInit, AfterViewInit {
     private redraw() {
         const xOffset = 300;
         const yOffset = 200;
-        const vRatio = 150;
         
-        this.tick++;
+        this.tick += 1;
+        const vRatio = this.tick;
+
         const rx = (v) => {
             return Math.random() * 1000 * v;
         }
@@ -63,15 +63,21 @@ export class CompasComponent implements OnInit, AfterViewInit {
 
         const frx = (v, index) => {
             const rs = index;
-            return (v / vRatio) * (rs % 2) * (rs % 4 ? 1 : -1) + xOffset;
+            const direction = (rs % 2 ? 0 : 1) * (rs % 4 ? -1 : 1);
+            return (v / vRatio) * direction + xOffset;
         }
         const fry = (v, index) => {
             const rs = index + 1;
-            return (v / vRatio) * (rs % 2) * (rs % 4 ? 1 : -1) + yOffset;
+            const direction = (rs % 2 ? 0 : 1) * (rs % 4 ? -1 : 1);
+            return (v / vRatio) * direction + yOffset;
         }
         const frr = (v, index) => {
-            return 1;
+            return Math.max(1, 2 + v / 10000);
         }
+        const fFontSize = (v, index) => {
+            return frr(v, index) + 7;
+        }
+
         this.doc.selectAll('*').remove();
         const fibo = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811];
         
@@ -81,7 +87,7 @@ export class CompasComponent implements OnInit, AfterViewInit {
                 .attr('cx', frx(value, index))
                 .attr('cy', fry(value, index))
                 .attr('r', frr(value, index))
-                .style('opacity', zopacity(value, index))
+                .style('opacity', 1)
 
             this.doc
                 .append('text')
@@ -89,7 +95,7 @@ export class CompasComponent implements OnInit, AfterViewInit {
                 .attr('y', fry(value, index))
                 .text(() => `${value}`)
                 .attr("font-family", "sans-serif")
-                .attr("font-size", `${2 + value / 1000}px`)
+                .attr("font-size", `${fFontSize(value, index)}px`)
                 .attr("fill", "red");
         });
 
